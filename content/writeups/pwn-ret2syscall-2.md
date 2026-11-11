@@ -11,7 +11,7 @@ tags: ["PWN", "ROP", "Hands-on", "Easy", "x64", "ret2syscall"]
 status: "published"
 flag: "SHELL"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/pwn-ret2syscall-2"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-ret2syscall-2"
 ---
 
 # ret2syscall

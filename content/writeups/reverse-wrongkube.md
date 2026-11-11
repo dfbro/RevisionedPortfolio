@@ -11,7 +11,7 @@ tags: ["Reverse Engineering", "Hard", "Pyinstxtractor"]
 status: "published"
 flag: "grodno{5h4d0w_c0ntr0l_pl4n3_qu0rum_r3c0nc1l3d}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/reverse-wrongkube"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/reverse-wrongkube"
 ---
 
 # WrongKube+

@@ -11,7 +11,7 @@ tags: ["Forensic", "Medium", "Zero Width Unicode"]
 status: "published"
 flag: "SCTF26{z3r0_w1dth_1s_tr1cky_f0r_3y3s}"
 attachments: [{"url": "/assets/uploads/15091af0-9f94-4064-bd5e-317f4b5e7403-a.txt", "name": "15091af0-9f94-4064-bd5e-317f4b5e7403-a.txt", "contentType": "application/octet-stream"}]
-source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/forensics-invisible-ink"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-invisible-ink"
 ---
 
 # Invisible Ink

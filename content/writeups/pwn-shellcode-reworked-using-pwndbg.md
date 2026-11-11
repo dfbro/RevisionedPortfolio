@@ -11,7 +11,7 @@ tags: ["PWN", "Easy", "Shellcode"]
 status: "published"
 flag: "-"
 attachments: [{"url": "/assets/uploads/80897c2b-dec8-4a03-a379-7ac82d443be0-vuln", "name": "80897c2b-dec8-4a03-a379-7ac82d443be0-vuln", "contentType": "application/octet-stream"}]
-source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/pwn-shellcode-reworked-using-pwndbg"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-shellcode-reworked-using-pwndbg"
 ---
 
 # Shellcode (reworked using pwndbg)

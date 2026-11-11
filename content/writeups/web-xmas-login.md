@@ -11,7 +11,7 @@ tags: ["SQL Injection", "SQLi"]
 status: "published"
 flag: "Alpaca{M3rry_Xmas!_Th1s_is_4_g1ft_fr0m_santa!_and_Happy_N3w_Year_2026!!}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/web-xmas-login"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-xmas-login"
 ---
 
 # Xmas Login

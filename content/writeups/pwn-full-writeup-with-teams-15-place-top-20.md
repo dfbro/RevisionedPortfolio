@@ -11,7 +11,7 @@ tags: ["PWN", "Reverse Engineering", "Forensic"]
 status: "published"
 flag: "KTCG Community https://discord.gg/Q5dVVBs6xX"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/pwn-full-writeup-with-teams-15-place-top-20"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-full-writeup-with-teams-15-place-top-20"
 ---
 
 # Full Writeup with teams (15 place / top 20)

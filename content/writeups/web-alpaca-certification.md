@@ -11,7 +11,7 @@ tags: []
 status: "published"
 flag: "Alpaca{L3ts_continu3_th1s_f0r_another_6_mon7hs}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/web-alpaca-certification"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-alpaca-certification"
 ---
 
 # Alpaca Certification

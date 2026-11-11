@@ -1,4 +1,4 @@
-import { createReadStream, readFileSync } from "node:fs";
+import { createReadStream } from "node:fs";
 import { stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
@@ -6,8 +6,6 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "out");
 const PORT = Number(process.argv[2] ?? process.env.PORT ?? 3100);
-const SITE = JSON.parse(readFileSync(path.resolve("content/site.json"), "utf8"));
-const BASE_PATH = process.env.STATIC_SITE_BASE_PATH ?? new URL(process.env.STATIC_SITE_URL ?? SITE.url).pathname.replace(/\/+$/, "");
 const TYPES = {
   ".avif": "image/avif",
   ".css": "text/css; charset=utf-8",
@@ -80,13 +78,7 @@ const server = createServer(async (request, response) => {
     return;
   }
 
-  // Map the hosted project-site prefix back to the export root for local previews.
-  const exportPath = pathname === BASE_PATH || pathname === BASE_PATH + "/"
-    ? "/"
-    : pathname.startsWith(BASE_PATH + "/")
-      ? pathname.slice(BASE_PATH.length)
-      : pathname;
-  let file = await resolveFile(exportPath);
+  let file = await resolveFile(pathname);
   let status = 200;
   if (!file) {
     file = path.join(ROOT, "404.html");

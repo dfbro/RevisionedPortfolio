@@ -7,7 +7,6 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const WRITEUPS = path.join(ROOT, "content", "writeups");
 const OUTPUT = path.join(ROOT, "public", "assets", "exports");
 const SITE_CONFIG = JSON.parse(readFileSync(path.join(ROOT, "content", "site.json"), "utf8"));
-const SITE_URL = (process.env.STATIC_SITE_URL || SITE_CONFIG.url).replace(/\/+$/, "");
 
 function parseArticle(file) {
   const raw = readFileSync(file, "utf8");
@@ -82,7 +81,7 @@ async function main() {
         "difficulty: " + JSON.stringify(metadata.difficulty || ""),
         "date: " + JSON.stringify(date),
         "tags: " + JSON.stringify(tags),
-        "source: " + JSON.stringify(SITE_URL + "/writeups/" + slug),
+        "source: " + JSON.stringify(SITE_CONFIG.url.replace(/\/+$/, "") + "/writeups/" + slug),
         "---",
         "",
         "# " + title,
@@ -113,7 +112,7 @@ async function main() {
         metadata.summary ? "<p>" + escapeHtml(metadata.summary) + "</p>" : "",
         tagsHtml ? "<ul class=\"tags\">" + tagsHtml + "</ul>" : "",
         "<article>" + htmlBody + "</article>",
-        "<footer class=\"meta\">Exported from " + escapeHtml(SITE_URL) + " · Elang Dimas Syadewa (Claritys)</footer>",
+        "<footer class=\"meta\">Exported from " + escapeHtml(SITE_CONFIG.url) + " · Elang Dimas Syadewa (Claritys)</footer>",
         "</main></body></html>",
       ].join("");
       writeFileSync(path.join(OUTPUT, slug + ".md"), markdown);

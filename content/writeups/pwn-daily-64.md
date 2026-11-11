@@ -11,7 +11,7 @@ tags: ["PWN", "ROP", "Hands-on", "Medium", "x64", "ret2bss"]
 status: "published"
 flag: "SHELL"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/pwn-daily-64"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-daily-64"
 ---
 
 # daily_64

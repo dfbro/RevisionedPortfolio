@@ -11,7 +11,7 @@ tags: ["Forensic", "Easy", "PDF"]
 status: "published"
 flag: "NCLPS1{teRny4ta_fl4g_d1_r3v1Si0n_z3Ro_iNcr3MenTal_uPddaTe_m3n1pu_m4ta_0dd31503e3}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/forensics-redaction-fail"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-redaction-fail"
 ---
 
 # Redaction Fail

@@ -11,7 +11,7 @@ tags: ["SQLi", "SQL Injection"]
 status: "published"
 flag: "Alpaca{SQLi_with0ut_5ingle_quot3s!}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/web-simple-login"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-simple-login"
 ---
 
 # Simple Login

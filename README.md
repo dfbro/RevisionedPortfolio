@@ -32,27 +32,21 @@ The public site has no database, login, upload endpoint, contact API, or request
 
 ## Deploy
 
-The `.github/workflows/pages.yml` workflow keeps lint, typecheck, unit tests, content validation, static build and output verification in the source repository. It uploads `out/` as a generic workflow artifact, then publishes that artifact to the separate `dfbro/RevisionedPortfolioSite` repository. The target repository contains only the generated site and publishes `main` → `/(root)` through GitHub Pages branch publishing.
+The `pages.yml` GitHub Actions workflow runs lint, typecheck, unit tests, content validation, static export, output verification, and deploys the `out/` artifact to GitHub Pages. The production site is served entirely from static files.
 
 ### Domain and route configuration
 
 `content/site.json` is the source for the canonical site origin, trailing-slash policy, title, description, and language. The build derives canonical metadata, Open Graph URLs, JSON-LD, sitemap, and robots output from this configuration. Changing the URL in this file does not change DNS or GitHub Pages settings; those must be configured separately.
 
-GitHub Pages serves the static deployment repository at [https://dfbro.github.io/RevisionedPortfolioSite/](https://dfbro.github.io/RevisionedPortfolioSite/). The build derives Next.js `basePath` and canonical URLs from the `STATIC_SITE_REPOSITORY` Actions variable. The source repository no longer hosts Pages directly and has no Pages-specific Actions permissions. No custom domain is configured.
+GitHub Pages serves this project at `https://dfbro.github.io/RevisionedPortfolio/`; `next.config.ts` sets the matching project-site base path. No custom domain or DNS ownership is required.
 
 ### Editing content
 
-Run the sibling local editor from `../RevisionedPortfolioEditor`. It reads and writes this source repository's `content/` and `public/assets/` directly. There is no second content database. Save changes locally, review the Git diff, then explicitly commit and push. GitHub Actions builds here and pushes only generated files to the separate static repository.
+Run the sibling local editor from `../RevisionedPortfolioEditor`. It reads and writes this repository's `content/` and `public/assets/` directly. There is no second content database. Save changes locally, review the Git diff, then explicitly commit and push. GitHub Actions handles the build and deployment.
 
 ### Data migration archive
 
 The old PostgreSQL/Prisma runtime and deployment files have been removed from this public repository. A read-only copy of the old runtime configuration and migration report is retained under the workspace-level `legacy-archive/`; it is not part of this repository or the static output. Do not publish SQL dumps, credentials, private contact messages, access logs, or unreviewed fields from the old system.
-
-## Documentation
-
-- [GitHub Pages deployment and troubleshooting](docs/github-pages.md)
-- [Production content and publishing](docs/content-publishing.md)
-- [Workspace operating guide](../docs/WORKSPACE-GUIDE.md)
 
 ## Design rules
 
@@ -60,7 +54,7 @@ The site is editorial first. Large Archivo type, one accent (`#FF5B1F`), mono on
 
 1. The hero role line decrypts once.
 2. Section indexes are hex (`0x01 / about`).
-3. Writeup flags have a visual reveal control; the value is still included in public static output.
+3. Writeup flags are visually redacted until clicked.
 4. The nav shows scroll progress as `0x0000 → 0xFFFF`.
 5. The footer's giant `ELANG` occasionally glitches into `CLARITYS`. Its timing lives in `src/lib/glitch.ts`.
 

@@ -1,4 +1,4 @@
-name: Build and publish static portfolio
+name: Deploy static portfolio to GitHub Pages
 
 on:
   push:
@@ -7,21 +7,18 @@ on:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 concurrency:
-  group: revisioned-source-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
+  group: pages
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    env:
-      STATIC_SITE_REPOSITORY: ${{ vars.STATIC_SITE_REPOSITORY }}
-      STATIC_SITE_MAX_SIZE_MB: ${{ vars.STATIC_SITE_MAX_SIZE_MB }}
     steps:
-      - name: Checkout source repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Install pnpm
@@ -34,22 +31,6 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-
-      - name: Resolve static site target
-        shell: bash
-        run: |
-          set -euo pipefail
-          repository="${STATIC_SITE_REPOSITORY:-}"
-          if [[ ! "$repository" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]; then
-            echo "::error::Set the repository variable STATIC_SITE_REPOSITORY to OWNER/REPOSITORY."
-            exit 1
-          fi
-
-          owner="${repository%%/*}"
-          name="${repository#*/}"
-          echo "STATIC_SITE_BASE_PATH=/$name" >> "$GITHUB_ENV"
-          echo "STATIC_SITE_URL=https://$owner.github.io/$name" >> "$GITHUB_ENV"
-          echo "Static publication target: $repository"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -72,116 +53,18 @@ jobs:
       - name: Verify exported files
         run: pnpm verify:output
 
-      - name: Deployment preflight and size report
-        run: pnpm deployment:preflight
-
-      - name: Upload generic static-site artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: static-site
-          path: ./out/
-          if-no-files-found: error
-          include-hidden-files: true
-          retention-days: 7
-
-  publish:
-    name: Publish to static repository
-    needs: build
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    concurrency:
-      group: static-site-publish-${{ vars.STATIC_SITE_REPOSITORY }}-${{ vars.STATIC_SITE_BRANCH || 'main' }}
-      cancel-in-progress: false
-    env:
-      STATIC_SITE_REPOSITORY: ${{ vars.STATIC_SITE_REPOSITORY }}
-      STATIC_SITE_BRANCH: ${{ vars.STATIC_SITE_BRANCH || 'main' }}
-    steps:
-      - name: Validate publication credentials and target
-        shell: bash
-        env:
-          STATIC_SITE_DEPLOY_TOKEN: ${{ secrets.STATIC_SITE_DEPLOY_TOKEN }}
-        run: |
-          set -euo pipefail
-          repository="${STATIC_SITE_REPOSITORY:-}"
-          branch="${STATIC_SITE_BRANCH:-main}"
-
-          if [[ ! "$repository" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]; then
-            echo "::error::STATIC_SITE_REPOSITORY must be OWNER/REPOSITORY."
-            exit 1
-          fi
-          if [[ "$branch" != "main" ]]; then
-            echo "::error::STATIC_SITE_BRANCH must remain main while GitHub Pages is configured for main/(root)."
-            exit 1
-          fi
-          if [[ -z "${STATIC_SITE_DEPLOY_TOKEN:-}" ]]; then
-            echo "::error::Missing source-repository secret STATIC_SITE_DEPLOY_TOKEN."
-            exit 1
-          fi
-          git check-ref-format --branch "$branch" >/dev/null
-          echo "Validated target $repository on branch $branch."
-
-      - name: Download static-site artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: static-site
           path: ./out
 
-      - name: Checkout final static-site repository
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ vars.STATIC_SITE_REPOSITORY }}
-          ref: ${{ vars.STATIC_SITE_BRANCH || 'main' }}
-          token: ${{ secrets.STATIC_SITE_DEPLOY_TOKEN }}
-          path: static-site
-          fetch-depth: 0
-          persist-credentials: true
-
-      - name: Synchronize generated website into repository root
-        shell: bash
-        run: |
-          set -euo pipefail
-          test -f ./out/index.html || {
-            echo "::error::Downloaded artifact does not contain root index.html."
-            exit 1
-          }
-          command -v rsync >/dev/null || {
-            echo "::error::rsync is required on the deployment runner."
-            exit 1
-          }
-
-          # Keep repository metadata and intentional Pages files; replace all published output.
-          rsync -a --delete \
-            --exclude='/.git/' \
-            --exclude='/CNAME' \
-            --exclude='/.nojekyll' \
-            ./out/ ./static-site/
-
-          # GitHub Pages must not run Jekyll over Next.js _next assets.
-          touch ./static-site/.nojekyll
-          test -f ./static-site/index.html
-          test -d ./static-site/_next/static
-
-          echo "Synchronized static export:"
-          find ./static-site -maxdepth 1 -mindepth 1 -printf '%f\n' | sort
-
-      - name: Inspect changes and publish without rewriting history
-        shell: bash
-        run: |
-          set -euo pipefail
-          cd ./static-site
-
-          echo "Repository status before staging:"
-          git status --short
-
-          git add --all
-          if git diff --cached --quiet; then
-            echo "Static output is unchanged; skipping commit and push."
-            exit 0
-          fi
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: publish static site from ${GITHUB_SHA:0:12}"
-          git push origin "HEAD:refs/heads/${STATIC_SITE_BRANCH}"
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -11,7 +11,7 @@ tags: ["PWN", "ROP", "Hands-on", "Medium", "x64", "ret2csu"]
 status: "published"
 flag: "SHELL"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/pwn-ret2csu"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-ret2csu"
 ---
 
 # ret2csu

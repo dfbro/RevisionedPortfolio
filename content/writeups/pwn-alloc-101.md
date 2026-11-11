@@ -11,7 +11,7 @@ tags: ["heap", "UAF"]
 status: "published"
 flag: "Alpaca{dive_into_heap_23af5b4f}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/pwn-alloc-101"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-alloc-101"
 ---
 
 # alloc-101

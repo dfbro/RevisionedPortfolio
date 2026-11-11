@@ -11,7 +11,7 @@ tags: ["ROP", "ret2libc", "Buffer Overflow"]
 status: "published"
 flag: "HZU18{type_it_manually_if_you_want_but_better_you_do_it_yourself}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/pwn-useless"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-useless"
 ---
 
 # useless

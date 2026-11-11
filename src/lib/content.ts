@@ -6,7 +6,6 @@ import path from "node:path";
 import { z } from "zod";
 import { achievementWeight } from "@/lib/achievements";
 import { normalizeCategory, sortSkillsPwnFirst } from "@/lib/data/mappers";
-import { siteUrl } from "@/lib/site";
 import type { AchievementItem, Attachment, Profile, ProjectItem, WriteupDetail, WriteupSummary } from "@/lib/types";
 
 const CONTENT_ROOT = path.join(process.cwd(), "content");
@@ -298,10 +297,7 @@ export const getProfile = cache(async (): Promise<Profile> => {
   };
 });
 
-export const getSiteConfig = cache(async (): Promise<SiteConfig> => ({
-  ...readJson("site.json", siteSchema),
-  url: siteUrl(),
-}));
+export const getSiteConfig = cache(async (): Promise<SiteConfig> => readJson("site.json", siteSchema));
 
 export function publishedSlugs(): string[] {
   return loadAllArticles().filter((item) => item.metadata.status === "published").map((item) => item.metadata.slug);

@@ -11,7 +11,7 @@ tags: ["PWN", "Medium", "ret2libc (should be)", "ret2dlresolve"]
 status: "published"
 flag: "SCTF26{p0l1n0m14l_d4n_b0f_b1k1n_k0p3r4s1_j3b0l}"
 attachments: [{"url": "/assets/uploads/6e464511-a13e-42da-bdc6-e683285a461d-koperasi", "name": "6e464511-a13e-42da-bdc6-e683285a461d-koperasi", "contentType": "application/octet-stream"}]
-source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/pwn-koperasi"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-koperasi"
 ---
 
 # Koperasi
