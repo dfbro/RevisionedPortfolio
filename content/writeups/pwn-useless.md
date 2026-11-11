@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-10-23"
 updated: "2026-10-30"
 summary: "BOF → ret2libc"
-tags: ["ROP", "ret2libc", "Buffer Overflow"]
+tags: ["ROP","RET2LIBC","BUFFER OVERFLOW"]
 status: "published"
 flag: "HZU18{type_it_manually_if_you_want_but_better_you_do_it_yourself}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-useless"
+source: "https://claritys.web.id/writeups/pwn-useless"
 ---
 
 # useless

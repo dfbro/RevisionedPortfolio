@@ -6,12 +6,12 @@ category: "Forensics"
 difficulty: "Medium"
 date: "2026-06-26"
 updated: "2026-06-29"
-summary: "Challenge ini ngasih file PNG bernama frequency_trap.png. Dari tampilannya sih cuma gambar biasa, tapi metadata-nya langsung ngasih clue kalau ada steganography di domain frekuensi: Image Description : Method: YCbCr_DCT_8x8_coeff3x3 Jadi intinya: ambil password dari EXIF, ubah gambar ke YCbCr, pecah per blok 8×8, lalu cek tanda (positif/negatif) dari koefisien DCT. Ada jebakan kecil juga: satu koefisien ngasih flag yang kelihatan valid, tapi ternyata decoy."
-tags: ["Forensic", "DCT", "Easy-Medium"]
+summary: "Challenge ini ngasih file PNG bernama frequency_trap.png. Dari tampilannya sih cuma gambar biasa, tapi metadata-nya langsung ngasih clue kalau ada steganography di domain frekuensi: Image Description : Method: YCbCr_DCT_8x8_coeff3x3 Jadi intinya: ambil password dari EXIF, ubah gambar ke YCbCr, pecah per blok 8×8, lalu cek tanda (positif/negatif) dari koefisien DCT. Ada jebakan kecil juga: satu koefisien ngasih flag yang kelihatan valid, tapi ternyata decoy."
+tags: ["FORENSIC","DCT","EASY-MEDIUM"]
 status: "published"
 flag: "TBCTF{frequency_trap_successful}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-frequency-trap"
+source: "https://claritys.web.id/writeups/forensics-frequency-trap"
 ---
 
 # Frequency Trap

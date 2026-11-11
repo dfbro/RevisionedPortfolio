@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-07-04"
 updated: "2026-07-06"
 summary: "Deskripsi: Seorang SysAdmin pemula di perusahaan rintisan mencoba memamerkan kejeniusannya dengan merancang sistem penjadwalan OS (Scheduler) kustom dari nol. Dia sesumbar bahwa pembagian kerjanya sempurna dan mustahil disusupi. Buktikan bahwa dia salah. Eksploitasi antrean prosesnya, ambil alih kendali tertinggi, dan jadilah raja di sistem itu!\\n\\nnc 103.127.98.249 5003"
-tags: ["PWN", "Medium", "GOT Overwrite"]
+tags: ["PWN","MEDIUM","GOT OVERWRITE"]
 status: "published"
 flag: "SCTF26{r0und_r0b1n_scheduler_n1ghtm4re_72918403a}"
-attachments: [{"url": "/assets/uploads/788c0054-2f0c-4e0e-a0e3-1273cc785ba2-round_robin.zip", "name": "788c0054-2f0c-4e0e-a0e3-1273cc785ba2-round_robin.zip", "contentType": "application/octet-stream"}]
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-round-robin"
+attachments: [{"url":"/assets/uploads/788c0054-2f0c-4e0e-a0e3-1273cc785ba2-round_robin.zip","name":"round_robin.zip","contentType":"application/octet-stream"}]
+source: "https://claritys.web.id/writeups/pwn-round-robin"
 ---
 
 # Round Robin
@@ -104,8 +104,3 @@ Yang di mana, 4199321 itu adalah decimal dari address win.
 >>> hex(4199321)
 '0x401399'
 ```
-
-
-## Attachments
-
-- [round_robin.zip](/assets/uploads/788c0054-2f0c-4e0e-a0e3-1273cc785ba2-round_robin.zip)

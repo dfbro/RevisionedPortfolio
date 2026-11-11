@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-11-07"
 updated: "2026-11-07"
 summary: "client side like bot fetcher, but holy moly i'm stuck because i thought the conf is different than the source code that given to us :heart_break:"
-tags: ["XSS", "bot", "Crawler", "Fetcher", "Attribute Injection"]
+tags: ["XSS","BOT","CRAWLER","FETCHER","ATTRIBUTE INJECTION"]
 status: "published"
 flag: "Alpaca{Client_s1de_ch4llenges_ar3_fun}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-animal-viewer"
+source: "https://claritys.web.id/writeups/web-animal-viewer"
 ---
 
 # Animal Viewer
@@ -120,7 +120,7 @@ const html = `
 ---snippet---
 
       </li>
-      <img src="https://dfbro.github.io/RevisionedPortfolio/[ANIMAL].png">
+      <img src="https://claritys.web.id/[ANIMAL].png">
   </body>
 </html>
 `;

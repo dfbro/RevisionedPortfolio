@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-08-22"
 updated: "2026-08-24"
 summary: "Sudah lama tidak ketemu soal seperti ini, semoga memperbanyak ilmu kalian, cemungut BeeCTF. Author: wavess"
-tags: ["Forensic", "Medium", "USB", "PCAP"]
+tags: ["FORENSIC","MEDIUM","USB","PCAP"]
 status: "published"
 flag: "BeeCTF{sud4h_l4ma_t1dak_bu4t_s0al_s3p3rti_1ni}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-sudah-lama"
+source: "https://claritys.web.id/writeups/forensics-sudah-lama"
 ---
 
 # Sudah lama

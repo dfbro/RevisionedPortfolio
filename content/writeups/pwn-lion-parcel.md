@@ -7,11 +7,11 @@ difficulty: "Easy"
 date: "2026-11-07"
 updated: "2026-11-07"
 summary: "ret2libc but we have to pull the libc from docker manually."
-tags: ["ret2libc", "Buffer Overflow", "GOT Overwrite"]
+tags: ["RET2LIBC","BUFFER OVERFLOW","GOT OVERWRITE"]
 status: "published"
 flag: "PLAYITPLUS{4ee458a53ab498aaa7958bb6855a55ef339917d48a0753c4e9b1fc868837396e}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-lion-parcel"
+source: "https://claritys.web.id/writeups/pwn-lion-parcel"
 ---
 
 # Lion Parcel

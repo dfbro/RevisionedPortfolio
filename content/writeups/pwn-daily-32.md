@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-08-18"
 updated: "2026-08-24"
 summary: "Latihan buat persiapan seleksi LKS, isinya ret2bss / ret2plt."
-tags: ["PWN", "ROP", "Hands-on", "Medium", "x86", "ret2bss"]
+tags: ["PWN","ROP","HANDS-ON","MEDIUM","X86","RET2BSS"]
 status: "published"
 flag: "SHELL"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-daily-32"
+source: "https://claritys.web.id/writeups/pwn-daily-32"
 ---
 
 # daily_32

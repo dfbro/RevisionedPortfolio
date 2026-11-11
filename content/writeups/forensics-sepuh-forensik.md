@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-07-01"
 updated: "2026-07-01"
 summary: "Di chall ini kita dikasih `forensic.pcapng` yang awalnya keliatan rame banget karena banyak traffic HTTP random. Setelah dipilah, ada beberapa hal yang mencurigakan: login ke `internal-portal.local/login.php`, fake flag yang jelas-jelas jebakan, dan file PNG yang dikirim lewat TCP stream 96. PNG itu ternyata berisi QR code rusak/kurang kebaca, jadi perlu direcover dulu. Setelah QR kebaca, datanya masih belum langsung jadi flag karena masih berlapis Base64, Base32, lalu XOR. Key XOR-nya diambil dari password login yang ketangkep di traffic: `rahasia`."
-tags: ["Forensics", "PCAP", "MISC", "Medium"]
+tags: ["FORENSICS","PCAP","MISC","MEDIUM"]
 status: "published"
 flag: "SCTF{53pUh_f0r3n5iK_b312aK51_4mPun_puH_s838823}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-sepuh-forensik"
+source: "https://claritys.web.id/writeups/forensics-sepuh-forensik"
 ---
 
 # Sepuh Forensik

@@ -7,11 +7,11 @@ difficulty: "Easy"
 date: "2026-10-21"
 updated: "2026-10-30"
 summary: "A quiz based boot2root with combination of Web Exploitation"
-tags: ["boot2root", "Web Exploitation", "obfuscated", "CVE"]
+tags: ["BOOT2ROOT","WEB EXPLOITATION","OBFUSCATED","CVE"]
 status: "published"
 flag: "HTB{type_it_manually_if_you_want_but_better_you_do_it_yourself}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-two-million"
+source: "https://claritys.web.id/writeups/web-two-million"
 ---
 
 # Two Million

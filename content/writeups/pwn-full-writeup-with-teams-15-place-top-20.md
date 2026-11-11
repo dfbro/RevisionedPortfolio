@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-07-04"
 updated: "2026-07-06"
 summary: "SCTF 2026 Presented by : Kata ellie lagi cari team, jadi dia kontak kkarinzzz untuk menjadi membernya, lalu kkarinzzz mengontak claritys untuk menjadi anggota team dan dia setuju Party Members: Ellie Kkarinzzz Claritys (Me)"
-tags: ["PWN", "Reverse Engineering", "Forensic"]
+tags: ["PWN","REVERSE ENGINEERING","FORENSIC"]
 status: "published"
 flag: "KTCG Community https://discord.gg/Q5dVVBs6xX"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-full-writeup-with-teams-15-place-top-20"
+source: "https://claritys.web.id/writeups/pwn-full-writeup-with-teams-15-place-top-20"
 ---
 
 # Full Writeup with teams (15 place / top 20)

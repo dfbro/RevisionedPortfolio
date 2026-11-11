@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-11-06"
 updated: "2026-11-06"
 summary: "SQL Injection, but first we need to find the table name (because it's randomized) and then the column name (since it's also randomized). Once we have those, you can just extract the flag using a UNION injection."
-tags: ["SQL Injection", "SQLi"]
+tags: ["SQL INJECTION","SQLI"]
 status: "published"
 flag: "Alpaca{y0u_must_b3_sqli_m4ster}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-secret-table-2"
+source: "https://claritys.web.id/writeups/web-secret-table-2"
 ---
 
 # secret-table-2

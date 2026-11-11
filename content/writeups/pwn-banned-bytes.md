@@ -6,12 +6,12 @@ category: "Pwn"
 difficulty: "Hard"
 date: "2026-06-27"
 updated: "2026-06-29"
-summary: "Challenge-nya: binary pwn dengan overflow, tapi input kita disensor beberapa byte. Terus remote-nya dibungkus socat pakai pty, jadi exploit yang jalan di proses lokal belum tentu langsung jalan remote. Agak nyebelin, tapi justru bagian ngerinya di situ."
-tags: ["PWN", "Hard", "Sanitized Bufferoverflow"]
+summary: "Challenge-nya: binary pwn dengan overflow, tapi input kita disensor beberapa byte. Terus remote-nya dibungkus socat pakai pty, jadi exploit yang jalan di proses lokal belum tentu langsung jalan remote. Agak nyebelin, tapi justru bagian ngerinya di situ."
+tags: ["PWN","HARD","SANITIZED BUFFEROVERFLOW"]
 status: "published"
 flag: "TBCTF{r0p_byp4551ng_ch4r5_4r3_s0_3z}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-banned-bytes"
+source: "https://claritys.web.id/writeups/pwn-banned-bytes"
 ---
 
 # Banned Bytes

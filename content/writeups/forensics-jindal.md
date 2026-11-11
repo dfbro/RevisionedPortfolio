@@ -7,11 +7,11 @@ difficulty: "Easy"
 date: "2026-03-15"
 updated: "2026-07-06"
 summary: "🧩 Kesimpulan Challenge ini menggunakan beberapa teknik: File embedding (JPEG + ZIP) Nested archive Misdirection (troll message) Whitespace Steganography (tab & space encoding)"
-tags: ["Forensic", "Stegano", "Easy"]
+tags: ["FORENSIC","STEGANO","EASY"]
 status: "published"
 flag: "psych{w311_d0n3_sp4c3s_4r3n7_4lw4y5_3mpty}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-jindal"
+source: "https://claritys.web.id/writeups/forensics-jindal"
 ---
 
 # Jindal

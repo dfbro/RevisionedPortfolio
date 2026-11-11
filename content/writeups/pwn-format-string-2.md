@@ -7,11 +7,11 @@ difficulty: "Easy"
 date: "2026-10-22"
 updated: "2026-10-30"
 summary: "Format string attack with pwntools automated (elite ball knowledge)"
-tags: ["ROP", "format string"]
+tags: ["ROP","FORMAT STRING"]
 status: "published"
 flag: "academy{type_it_manually_if_you_want_but_better_you_do_it_yourself}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-format-string-2"
+source: "https://claritys.web.id/writeups/pwn-format-string-2"
 ---
 
 # Format String 2

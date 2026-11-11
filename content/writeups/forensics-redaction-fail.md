@@ -7,11 +7,11 @@ difficulty: "Easy"
 date: "2026-03-02"
 updated: "2026-07-06"
 summary: "🏁 Kesimpulan Flag tidak benar-benar dihapus dari PDF Data tersembunyi dalam stream ter-encode Redaction gagal karena: hanya visual masking tidak menghapus data asli"
-tags: ["Forensic", "Easy", "PDF"]
+tags: ["FORENSIC","EASY","PDF"]
 status: "published"
 flag: "NCLPS1{teRny4ta_fl4g_d1_r3v1Si0n_z3Ro_iNcr3MenTal_uPddaTe_m3n1pu_m4ta_0dd31503e3}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-redaction-fail"
+source: "https://claritys.web.id/writeups/forensics-redaction-fail"
 ---
 
 # Redaction Fail

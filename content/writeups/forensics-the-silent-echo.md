@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-06-27"
 updated: "2026-06-29"
 summary: "Di challenge ini kita dikasih file challenge.pcap. Kalau cuma pakai strings, banyak clue yang kelihatan sengaja dilempar ke muka: ada base64, SSH banner, HTTP request, payload AAAA, sampai download ISO Ubuntu. Tapi flag aslinya bukan di payload biasa. Dia disembunyikan di metadata paket: bagian pertama di high byte IP ID paket ICMP echo request bagian kedua di TCP window size ACK client pada koneksi HTTP download palsu"
-tags: ["Forensic", "PCAP", "Network Analyst", "Medium"]
+tags: ["FORENSIC","PCAP","NETWORK ANALYST","MEDIUM"]
 status: "published"
 flag: "TBCTF{h1dd3n_1n_w1nd0w_4nd_1p_1d!}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-the-silent-echo"
+source: "https://claritys.web.id/writeups/forensics-the-silent-echo"
 ---
 
 # The Silent Echo

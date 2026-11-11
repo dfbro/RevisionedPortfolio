@@ -7,11 +7,11 @@ difficulty: "Easy"
 date: "2026-11-04"
 updated: "2026-11-04"
 summary: "A bot crawler carries a flag as a header"
-tags: ["Crawler"]
+tags: ["CRAWLER"]
 status: "published"
 flag: "Alpaca{CRAWLER_IS_SUGOI!}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-fushigi-crawler"
+source: "https://claritys.web.id/writeups/web-fushigi-crawler"
 ---
 
 # Fushigi Crawler

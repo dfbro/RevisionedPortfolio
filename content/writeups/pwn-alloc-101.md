@@ -7,11 +7,11 @@ difficulty: "Easy"
 date: "2026-10-31"
 updated: "2026-10-31"
 summary: "Heap Exploitation, Use After Free (UAF)"
-tags: ["heap", "UAF"]
+tags: ["HEAP","UAF"]
 status: "published"
 flag: "Alpaca{dive_into_heap_23af5b4f}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-alloc-101"
+source: "https://claritys.web.id/writeups/pwn-alloc-101"
 ---
 
 # alloc-101

@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-03-07"
 updated: "2026-07-06"
 summary: "🧩 Summary Flow Git commit → ghost.log (keylogger) → recover password → decrypt ghost.enc → dapat file octal → decode → env dump → ambil FLAG"
-tags: ["MISC", "Medium", "First Blood"]
+tags: ["MISC","MEDIUM","FIRST BLOOD"]
 status: "published"
 flag: "FGTE0{Gh0st_C0m1ts_K3yL0g5_4nd_3nv_Dump5}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-ghost-typist"
+source: "https://claritys.web.id/writeups/forensics-ghost-typist"
 ---
 
 # Ghost Typist

@@ -6,12 +6,12 @@ category: "Pwn"
 difficulty: "Hard"
 date: "2026-06-26"
 updated: "2026-06-29"
-summary: "Blacklist karakter untuk Bash hampir selalu bisa dibypass, apalagi kalau masih ada: eval \"$input\" Bash expansion itu luas banget: tilde expansion, parameter expansion, substring expansion, arithmetic expansion, case conversion, dan sebagainya. Kalau user input bisa masuk ke eval, tinggal cari cara buat “merakit” karakter yang diblok setelah proses validasi selesai."
-tags: ["MISC", "Symbol-Only Bash Escape", "Hard"]
+summary: "Blacklist karakter untuk Bash hampir selalu bisa dibypass, apalagi kalau masih ada: eval \"$input\" Bash expansion itu luas banget: tilde expansion, parameter expansion, substring expansion, arithmetic expansion, case conversion, dan sebagainya. Kalau user input bisa masuk ke eval, tinggal cari cara buat “merakit” karakter yang diblok setelah proses validasi selesai."
+tags: ["MISC","SYMBOL-ONLY BASH ESCAPE","HARD"]
 status: "published"
 flag: "TBCTF{r357r1c73d_bu7_n07_1mp0551bl3}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-nash-jail"
+source: "https://claritys.web.id/writeups/pwn-nash-jail"
 ---
 
 # Nash Jail

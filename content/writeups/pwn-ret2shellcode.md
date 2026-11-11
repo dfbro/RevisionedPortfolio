@@ -7,11 +7,11 @@ difficulty: "Easy"
 date: "2026-08-18"
 updated: "2026-08-24"
 summary: "Latihan buat persiapan seleksi LKS, isinya ret2shellcode."
-tags: ["PWN", "ROP", "Hands-on", "Easy", "x86", "ret2shellcode"]
+tags: ["PWN","ROP","HANDS-ON","EASY","X86","RET2SHELLCODE"]
 status: "published"
 flag: "SHELL"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-ret2shellcode"
+source: "https://claritys.web.id/writeups/pwn-ret2shellcode"
 ---
 
 # ret2shellcode

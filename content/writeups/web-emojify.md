@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-11-04"
 updated: "2026-11-04"
 summary: "WAF filtered not really functional and SSRF vulnerability"
-tags: ["WAF", "SSRF"]
+tags: ["WAF","SSRF"]
 status: "published"
 flag: "Alpaca{Sup3r_Speci4l_Rar3_Flag}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-emojify"
+source: "https://claritys.web.id/writeups/web-emojify"
 ---
 
 # Emojify

@@ -12,6 +12,35 @@ test("home renders real content without horizontal overflow", async ({ page }) =
   expect(overflow).toBeLessThanOrEqual(0);
 });
 
+test("primary navigation transitions to projects and achievements", async ({ page }, info) => {
+  const failures: string[] = [];
+  page.on("pageerror", (error) => failures.push(error.message));
+  page.on("requestfailed", (request) => {
+    if (request.method() !== "HEAD" && request.url().startsWith("http://127.0.0.1:3100")) {
+      failures.push(`${request.method()} ${request.url()}`);
+    }
+  });
+  await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
+  await page.goto(sitePath());
+
+  const nav = page.locator("nav");
+  const menu = info.project.name === "mobile" ? page.locator("#mobile-menu") : nav;
+  const openMobileMenu = async () => {
+    if (info.project.name === "mobile") await page.getByRole("button", { name: "menu" }).click();
+  };
+
+  await openMobileMenu();
+  await menu.getByRole("link", { name: "Projects", exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`${BASE_PATH}/projects/$`));
+  await expect(page.locator("main h1")).toContainText("Projects");
+
+  await openMobileMenu();
+  await menu.getByRole("link", { name: "Record", exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`${BASE_PATH}/achievements/$`));
+  await expect(page.locator("main h1")).toContainText("Record");
+  expect(failures).toEqual([]);
+});
+
 test("first visit to home opens behind the preloader, which then lifts", async ({ page }, info) => {
   test.skip(info.project.name === "reduced-motion", "no preloader when motion is reduced");
   await page.goto(sitePath());

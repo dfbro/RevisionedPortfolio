@@ -7,11 +7,11 @@ difficulty: "Hard"
 date: "2026-03-14"
 updated: "2026-07-06"
 summary: "Challenge ini menunjukkan bagaimana attacker mempertahankan akses ke sistem menggunakan custom C2 agent berbasis PHP yang sederhana namun efektif. Dari proses analisis, dapat disimpulkan bahwa: Attacker menggunakan mekanisme polling C2 untuk menerima perintah secara remote. Komunikasi diamankan secara ringan menggunakan AES-128-ECB + double Base64 encoding, yang cukup untuk menghindari deteksi kasual tetapi tetap mudah di-reverse saat dianalisis. Artefak penting seperti agent.php dan agent_debug.log menjadi kunci utama dalam memahami cara kerja malware dan alur komunikasi C2. Hal paling krusial yang berhasil diungkap adalah: 👉 mekanisme persistence yang digunakan attacker, yaitu dengan menambahkan SSH public key ke dalam file authorized_keys. Ini memungkinkan attacker: Masuk kembali ke sistem kapan saja Tanpa perlu eksploitasi ulang Tanpa bergantung pada webshell atau C2 lagi"
-tags: ["Forensic", "Network Analyst", "PCAP", "Hard"]
+tags: ["FORENSIC","NETWORK ANALYST","PCAP","HARD"]
 status: "published"
 flag: "FGTE0{echo \"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBWOva1ZYUQ8FvZXcCu4b+VDLU0R4qVjs4sIkK4yUpdA root@ms.ariaf.my.id\" > /home/aria/.ssh/authorized_keys}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-cms-persistence-via-custom-c2"
+source: "https://claritys.web.id/writeups/forensics-cms-persistence-via-custom-c2"
 ---
 
 # CMS - Persistence via Custom C2

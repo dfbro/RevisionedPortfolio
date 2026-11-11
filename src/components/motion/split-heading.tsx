@@ -10,9 +10,9 @@ type Props = { text: string; as?: "h1" | "h2" | "p" | "span"; className?: string
 export function SplitHeading({ text, as: Tag = "h2", className, delay = 0, onScroll = false, waitIntro = false }: Props) {
   const ref = useRef<HTMLHeadingElement>(null);
   useGSAP(
-    (_, contextSafe) => {
+    () => {
       const mm = gsap.matchMedia();
-      mm.add(NO_REDUCED, () => {
+      mm.add(NO_REDUCED, (_, mediaContextSafe) => {
         let disposed = false;
         let split: SplitText | undefined;
         const createSplitNow = () => {
@@ -32,7 +32,7 @@ export function SplitHeading({ text, as: Tag = "h2", className, delay = 0, onScr
               }),
           });
         };
-        const createSplit = contextSafe?.(createSplitNow) ?? createSplitNow;
+        const createSplit = (mediaContextSafe?.(createSplitNow) as (() => void) | undefined) ?? createSplitNow;
         const start = () => {
           if (document.fonts.status === "loaded") createSplit();
           else void document.fonts.ready.then(createSplit);

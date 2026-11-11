@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-07-04"
 updated: "2026-07-06"
 summary: "Deskripsi : Sistem Koperasi Desa Suka Maju baru saja direvolusi menjadi digital. Namun, Kepala Desa mencium aroma busuk: kas mereka terus menyusut padahal tidak ada laporan kerugian! Diduga ada celah matematis yang memungkinkan peretas menggandakan uang mereka dari udara kosong. Tugasmu adalah menjadi auditor keamanan dadakan dan menguras kas tersebut untuk membuktikan kebobrokannya! nc 103.127.98.249 5002"
-tags: ["PWN", "Medium", "ret2libc (should be)", "ret2dlresolve"]
+tags: ["PWN","MEDIUM","RET2LIBC (SHOULD BE)","RET2DLRESOLVE"]
 status: "published"
 flag: "SCTF26{p0l1n0m14l_d4n_b0f_b1k1n_k0p3r4s1_j3b0l}"
-attachments: [{"url": "/assets/uploads/6e464511-a13e-42da-bdc6-e683285a461d-koperasi", "name": "6e464511-a13e-42da-bdc6-e683285a461d-koperasi", "contentType": "application/octet-stream"}]
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-koperasi"
+attachments: [{"url":"/assets/uploads/6e464511-a13e-42da-bdc6-e683285a461d-koperasi","name":"koperasi","contentType":"application/octet-stream"}]
+source: "https://claritys.web.id/writeups/pwn-koperasi"
 ---
 
 # Koperasi
@@ -279,8 +279,3 @@ def main():
 if __name__ == "__main__":
     main()
 ```
-
-
-## Attachments
-
-- [koperasi](/assets/uploads/6e464511-a13e-42da-bdc6-e683285a461d-koperasi)

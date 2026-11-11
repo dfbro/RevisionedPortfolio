@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-08-22"
 updated: "2026-08-24"
 summary: "The Flux Capacitor in Dr. Brown's old car is acting up, leaving him stuck in the wrong timeline. Maybe the “data” inside it can help him get the DeLorean running again. Author: c0smic"
-tags: ["Reverse Engineering", "XOR"]
+tags: ["REVERSE ENGINEERING","XOR"]
 status: "published"
 flag: "BeeCTF{flUx_cApAc1t0r_d3crYpt3d_sUcc3ss_djb21s34sy}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/reverse-flux-capacitor"
+source: "https://claritys.web.id/writeups/reverse-flux-capacitor"
 ---
 
 # Flux Capacitor

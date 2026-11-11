@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-07-04"
 updated: "2026-07-06"
 summary: "Deskripsi: Sebuah sinyal aneh terdeteksi dari stasiun penelitian bawah laut 'Abbys'. Tim ekspedisi sebelumnya menghilang tanpa jejak, meninggalkan sebuah antarmuka usang yang masih terus menyala dan memancarkan data. Mampukah kamu menyelami kedalaman kode ini dan merebut akses sistem sebelum tekanan air menghancurkan segalanya?\\n\\nnc 103.127.98.249 5001"
-tags: ["PWN", "Medium", "Stack & Heap"]
+tags: ["PWN","MEDIUM","STACK & HEAP"]
 status: "published"
 flag: "SCTF26{duh_puh_pwn_st4ck_d1tambah_h3ap_1ni_m4h_b4hl1l_jug4_b1ngng}"
-attachments: [{"url": "/assets/uploads/d591f01b-d4aa-4e2e-8a57-48f894fe2970-abbys", "name": "d591f01b-d4aa-4e2e-8a57-48f894fe2970-abbys", "contentType": "application/octet-stream"}]
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-abbys"
+attachments: [{"url":"/assets/uploads/d591f01b-d4aa-4e2e-8a57-48f894fe2970-abbys","name":"abbys","contentType":"application/octet-stream"}]
+source: "https://claritys.web.id/writeups/pwn-abbys"
 ---
 
 # Abbys
@@ -234,8 +234,3 @@ p.interactive()
 ```
 
 ![](/assets/uploads/e486f7a6-fe5e-4030-a33c-d7cd2c344ea6-image-22.png)
-
-
-## Attachments
-
-- [abbys](/assets/uploads/d591f01b-d4aa-4e2e-8a57-48f894fe2970-abbys)

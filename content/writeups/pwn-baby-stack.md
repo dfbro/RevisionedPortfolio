@@ -7,11 +7,11 @@ difficulty: "Easy"
 date: "2026-02-18"
 updated: "2026-07-06"
 summary: "🏁 Kesimpulan Challenge ini menunjukkan: Bahaya penggunaan gets() Konsep dasar stack buffer overflow Manipulasi non-control data Dengan overflow sederhana, kita bisa: Mengubah variabel penting dan mendapatkan akses admin."
-tags: ["PWN", "Easy", "Stack Overflow"]
+tags: ["PWN","EASY","STACK OVERFLOW"]
 status: "published"
 flag: "FGTE{B4bY_sT4ck_0verflow_1s_V3ry_D4ng3r0us!}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-baby-stack"
+source: "https://claritys.web.id/writeups/pwn-baby-stack"
 ---
 
 # baby-stack

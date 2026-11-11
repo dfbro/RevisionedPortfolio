@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-07-04"
 updated: "2026-07-06"
 summary: "Deskripsi: An ATM simulation with a custom encryption algorithm for the PIN."
-tags: ["Reverse Engineering", "Medium", "Keycheck"]
+tags: ["REVERSE ENGINEERING","MEDIUM","KEYCHECK"]
 status: "published"
 flag: "SCTF26{w3lc0m3_t0_th3_v4ult_p1n_9147487905852048613}"
-attachments: [{"url": "/assets/uploads/388f3f8d-7bee-494d-be8e-3b9b2e77271c-bank_vault.zip", "name": "388f3f8d-7bee-494d-be8e-3b9b2e77271c-bank_vault.zip", "contentType": "application/octet-stream"}]
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/reverse-bank-vault"
+attachments: [{"url":"/assets/uploads/388f3f8d-7bee-494d-be8e-3b9b2e77271c-bank_vault.zip","name":"bank_vault.zip","contentType":"application/octet-stream"}]
+source: "https://claritys.web.id/writeups/reverse-bank-vault"
 ---
 
 # Bank Vault
@@ -76,8 +76,3 @@ And turns out ya, aku awalnya tuh ngira tinggal pakai 0x48CF6EA6484LL aja buat m
 Gw liat langsung kepikiran. Eh ngapain aku nyari tau passwordnya ya, tinggal hitung v6 nya aja. Aku sadarnya ditengah tengah chattingan sama ChatGPT. Akhirnya tinggal masukin dari part yang 1 yaitu SCTF26{w3lc0m3\_t0\_th3\_v4ult\_p1n\_ dan digabungkan dengan v6, yang isinya adalah 9147487905852048613.
 
 Done
-
-
-## Attachments
-
-- [bank_vault.zip](/assets/uploads/388f3f8d-7bee-494d-be8e-3b9b2e77271c-bank_vault.zip)

@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-08-22"
 updated: "2026-08-24"
 summary: "I've always thought I have been in control of my whole world, but it's all a lie. I've finally found the door to really do what I want. Author: midn8 nc 103.185.52.197 6007 This one is hard, because I haven't really studied heap yet."
-tags: ["PWN", "UAF", "ret2libc", "heap", "tcache", "shell", "PIE", "x64", "medium"]
+tags: ["PWN","UAF","RET2LIBC","HEAP","TCACHE","SHELL","PIE","X64","MEDIUM"]
 status: "published"
 flag: "BeeCTF{gut3nm0rg3n_s3l4m4ts14ng_k0nb4w4!}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-truman"
+source: "https://claritys.web.id/writeups/pwn-truman"
 ---
 
 # Truman

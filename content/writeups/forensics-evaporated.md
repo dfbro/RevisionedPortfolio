@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-02-09"
 updated: "2026-07-06"
 summary: "🔚 Kesimpulan Challenge ini tidak hanya tentang forensik filesystem, tetapi juga: analisis struktur file pemahaman format PNG membedakan metadata vs data asli"
-tags: ["Forensic", "Medium", "Disk"]
+tags: ["FORENSIC","MEDIUM","DISK"]
 status: "published"
 flag: "NCLPS1{t4k_kus4ngkA_t3rny4Ta_fl4gny4_b3rsembuny1_09217b9c25}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-evaporated"
+source: "https://claritys.web.id/writeups/forensics-evaporated"
 ---
 
 # Evaporated

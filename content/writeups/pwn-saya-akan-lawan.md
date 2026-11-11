@@ -7,11 +7,11 @@ difficulty: "Easy"
 date: "2026-08-22"
 updated: "2026-08-24"
 summary: "Owi terus dihujat netizen, tetapi ia tetap diam. Entah sampai kapan kesabarannya bertahan. Author: pecinta jamu nc 103.185.52.197 5010 I failed to firstblood this challenge because distracted.."
-tags: ["PWN", "ret2libc", "call2plt", "format string", "heap", "PIE", "x64", "easy", "medium"]
+tags: ["PWN","RET2LIBC","CALL2PLT","FORMAT STRING","HEAP","PIE","X64","EASY","MEDIUM"]
 status: "published"
 flag: "BeeCTF{s4y4_s3b3tulny4_sud4h_d14m_4_5_t4hun_d1f1tn4h_s4y4_d14m_d1huj4t_s4y4_d14m_t4p1_h4r1_1n1_s4y4_4k4n_l4w4n}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-saya-akan-lawan"
+source: "https://claritys.web.id/writeups/pwn-saya-akan-lawan"
 ---
 
 # Saya akan lawan

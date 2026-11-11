@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-08-18"
 updated: "2026-08-24"
 summary: "Latihan buat persiapan seleksi LKS, isinya ret2libc."
-tags: ["PWN", "ROP", "Hands-on", "Medium", "x64", "ret2libc"]
+tags: ["PWN","ROP","HANDS-ON","MEDIUM","X64","RET2LIBC"]
 status: "published"
 flag: "SHELL"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-hsr-64"
+source: "https://claritys.web.id/writeups/pwn-hsr-64"
 ---
 
 # hsr_64

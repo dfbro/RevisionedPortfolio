@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-03-24"
 updated: "2026-07-06"
 summary: "🔚 Kesimpulan: Challenge ini menggabungkan Forensik (metadata & steganografi) Encoding (Base64) Kriptografi (AES + MD5)"
-tags: ["MISC", "Medium", "AES"]
+tags: ["MISC","MEDIUM","AES"]
 status: "published"
 flag: "FGTE{MISC_MASTERED}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/crypto-locked-desk-drawer"
+source: "https://claritys.web.id/writeups/crypto-locked-desk-drawer"
 ---
 
 # Locked Desk Drawer

@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-10-22"
 updated: "2026-10-30"
 summary: "GOT overwrite with libc technique + format string attack."
-tags: ["format string", "GOT Overwrite"]
+tags: ["FORMAT STRING","GOT OVERWRITE"]
 status: "published"
 flag: "academy{type_it_manually_if_you_want_but_better_you_do_it_yourself}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-format-string-3"
+source: "https://claritys.web.id/writeups/pwn-format-string-3"
 ---
 
 # Format String 3

@@ -7,11 +7,11 @@ difficulty: "Easy"
 date: "2026-08-18"
 updated: "2026-08-24"
 summary: "Latihan buat persiapan seleksi LKS, isinya ret2syscall."
-tags: ["PWN", "ROP", "Hands-on", "Easy", "x64", "ret2syscall"]
+tags: ["PWN","ROP","HANDS-ON","EASY","X64","RET2SYSCALL"]
 status: "published"
 flag: "SHELL"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-ret2syscall-2"
+source: "https://claritys.web.id/writeups/pwn-ret2syscall-2"
 ---
 
 # ret2syscall

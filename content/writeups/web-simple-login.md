@@ -7,11 +7,11 @@ difficulty: "Easy"
 date: "2026-11-04"
 updated: "2026-11-04"
 summary: "SQL Injection, but we can't use single quote."
-tags: ["SQLi", "SQL Injection"]
+tags: ["SQLI","SQL INJECTION"]
 status: "published"
 flag: "Alpaca{SQLi_with0ut_5ingle_quot3s!}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-simple-login"
+source: "https://claritys.web.id/writeups/web-simple-login"
 ---
 
 # Simple Login

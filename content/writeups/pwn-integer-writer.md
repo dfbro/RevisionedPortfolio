@@ -7,11 +7,11 @@ difficulty: "Hard"
 date: "2026-10-31"
 updated: "2026-10-31"
 summary: "Negative Integer + Out Of Bounds."
-tags: ["Out Of Bounds", "Negative Integer", "Stack"]
+tags: ["OUT OF BOUNDS","NEGATIVE INTEGER","STACK"]
 status: "published"
 flag: "Alpaca{D0_y0u_th1nk_th3_st4ck_gr0ws_upw4rd_0r_d0wnw4rd?}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-integer-writer"
+source: "https://claritys.web.id/writeups/pwn-integer-writer"
 ---
 
 # Integer Writer

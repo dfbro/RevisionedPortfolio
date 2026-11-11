@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-11-01"
 updated: "2026-11-01"
 summary: "Arbitrary Write, format string attack."
-tags: ["Arbitrary Write", "format string"]
+tags: ["ARBITRARY WRITE","FORMAT STRING"]
 status: "published"
 flag: "Alpaca{format_str1ng_is_s0_fun}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-rotten-beef"
+source: "https://claritys.web.id/writeups/pwn-rotten-beef"
 ---
 
 # Rotten Beef

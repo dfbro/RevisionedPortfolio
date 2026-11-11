@@ -7,11 +7,11 @@ difficulty: "Medium"
 date: "2026-07-04"
 updated: "2026-07-06"
 summary: "Deskripsi : Can you read between the lines?"
-tags: ["Forensic", "Medium", "Zero Width Unicode"]
+tags: ["FORENSIC","MEDIUM","ZERO WIDTH UNICODE"]
 status: "published"
 flag: "SCTF26{z3r0_w1dth_1s_tr1cky_f0r_3y3s}"
-attachments: [{"url": "/assets/uploads/15091af0-9f94-4064-bd5e-317f4b5e7403-a.txt", "name": "15091af0-9f94-4064-bd5e-317f4b5e7403-a.txt", "contentType": "application/octet-stream"}]
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-invisible-ink"
+attachments: [{"url":"/assets/uploads/15091af0-9f94-4064-bd5e-317f4b5e7403-a.txt","name":"a.txt","contentType":"text/plain"}]
+source: "https://claritys.web.id/writeups/forensics-invisible-ink"
 ---
 
 # Invisible Ink
@@ -39,8 +39,3 @@ Yaa.. even though sama aja merah merah but it’s different ahh moment. Langsung
 ![](/assets/uploads/ad3537bc-2d1c-4669-bd64-2f64245480cc-image-14.png)
 
 Completed :3
-
-
-## Attachments
-
-- [a.txt](/assets/uploads/15091af0-9f94-4064-bd5e-317f4b5e7403-a.txt)

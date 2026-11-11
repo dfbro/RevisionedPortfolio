@@ -7,11 +7,11 @@ difficulty: "Easy"
 date: "2026-07-09"
 updated: "2026-07-10"
 summary: ""
-tags: ["PWN", "Easy", "Shellcode"]
+tags: ["PWN","EASY","SHELLCODE"]
 status: "published"
 flag: "-"
-attachments: [{"url": "/assets/uploads/80897c2b-dec8-4a03-a379-7ac82d443be0-vuln", "name": "80897c2b-dec8-4a03-a379-7ac82d443be0-vuln", "contentType": "application/octet-stream"}]
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-shellcode-reworked-using-pwndbg"
+attachments: [{"url":"/assets/uploads/80897c2b-dec8-4a03-a379-7ac82d443be0-vuln","name":"vuln","contentType":"application/octet-stream"}]
+source: "https://claritys.web.id/writeups/pwn-shellcode-reworked-using-pwndbg"
 ---
 
 # Shellcode (reworked using pwndbg)
@@ -308,8 +308,3 @@ p.interactive()
 -   Once the return pointer got popped into EIP, it pointed at our shellcode
     
 -   This caused the program to execute our instructions, giving us (in this case) a shell for arbitrary command execution
-
-
-## Attachments
-
-- [vuln](/assets/uploads/80897c2b-dec8-4a03-a379-7ac82d443be0-vuln)

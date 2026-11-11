@@ -7,11 +7,11 @@ difficulty: "Hard"
 date: "2026-07-12"
 updated: "2026-07-18"
 summary: "Desc: I stumbled upon a rather peculiar utility for visualizing Kubernetes clusters online, but I have a feeling there’s something hidden inside it. Flag format: grodno{}"
-tags: ["Reverse Engineering", "Hard", "Pyinstxtractor"]
+tags: ["REVERSE ENGINEERING","HARD","PYINSTXTRACTOR"]
 status: "published"
 flag: "grodno{5h4d0w_c0ntr0l_pl4n3_qu0rum_r3c0nc1l3d}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/reverse-wrongkube"
+source: "https://claritys.web.id/writeups/reverse-wrongkube"
 ---
 
 # WrongKube+

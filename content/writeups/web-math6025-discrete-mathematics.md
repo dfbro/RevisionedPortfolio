@@ -7,11 +7,11 @@ difficulty: "Easy"
 date: "2026-08-22"
 updated: "2026-08-24"
 summary: "\"Solve this math assigment\" Then my ai proceeds to use some weird markup language for my math assigment. I asked the ai to make me a website so that i can use this language for my future assigment. Let's hope there's no naughty highschooler that will inject my site lol Author: sierra http://103.185.52.197:6767"
-tags: ["Web Exploitation", "LaTex"]
+tags: ["WEB EXPLOITATION","LATEX"]
 status: "published"
 flag: "BeeCTF{Duh_dismathlagi_dismathLagi_disssnutz_hehehehheeh_galucu_ya:(}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-math6025-discrete-mathematics"
+source: "https://claritys.web.id/writeups/web-math6025-discrete-mathematics"
 ---
 
 # MATH6025 - Discrete Mathematics
