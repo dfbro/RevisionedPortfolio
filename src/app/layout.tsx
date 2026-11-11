@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { ThemeProvider } from "next-themes";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { INTRO_SCRIPT } from "@/lib/intro";
+import { createIntroScript } from "@/lib/intro";
 import { appearanceCssVariables, getAppearance, getProfile, getSiteConfig } from "@/lib/content";
 import "./globals.css";
 
@@ -30,7 +30,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <style dangerouslySetInnerHTML={{ __html: appearanceCssVariables(appearance) }} />
         {/* Flags a first visit to "/" before paint, so the preloader shows without a flash (lib/intro.ts). */}
-        <script dangerouslySetInnerHTML={{ __html: INTRO_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: createIntroScript(new URL(site.url).pathname.replace(/\/+$/, "")) }} />
       </head>
       <body>
         <ThemeProvider attribute="class" defaultTheme={appearance.defaultTheme} enableSystem={false} disableTransitionOnChange>

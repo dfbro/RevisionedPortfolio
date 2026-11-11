@@ -10,39 +10,38 @@ type Props = { text: string; as?: "h1" | "h2" | "p" | "span"; className?: string
 export function SplitHeading({ text, as: Tag = "h2", className, delay = 0, onScroll = false, waitIntro = false }: Props) {
   const ref = useRef<HTMLHeadingElement>(null);
   useGSAP(
-    () => {
+    (_, contextSafe) => {
       const mm = gsap.matchMedia();
       mm.add(NO_REDUCED, () => {
-        // Split right away so the chars sit hidden under their masks, then play once the preloader lifts.
-        let ready = !waitIntro;
-        const tweens: gsap.core.Tween[] = [];
-        const split = SplitText.create(ref.current!, {
-          type: "chars,words",
-          mask: "chars",
-          autoSplit: true,
-          onSplit: (self) => {
-            const tw = gsap.from(self.chars, {
-              yPercent: 110,
-              duration: 1.1,
-              ease: "expo.out",
-              stagger: 0.022,
-              delay,
-              paused: !ready,
-              scrollTrigger: onScroll ? { trigger: ref.current, start: "top 85%", once: true } : undefined,
-            });
-            tweens.push(tw);
-            return tw;
-          },
-        });
-        const off = waitIntro
-          ? onIntroDone(() => {
-              ready = true;
-              for (const tw of tweens) tw.play();
-            })
-          : undefined;
+        let disposed = false;
+        let split: SplitText | undefined;
+        const createSplitNow = () => {
+          if (disposed || !ref.current) return;
+          split = SplitText.create(ref.current, {
+            // Only chars are animated; wrapping every word as well creates unused DOM nodes.
+            type: "chars",
+            mask: "chars",
+            onSplit: (self) =>
+              gsap.from(self.chars, {
+                yPercent: 110,
+                duration: 0.86,
+                ease: "power3.out",
+                stagger: 0.014,
+                delay,
+                scrollTrigger: onScroll ? { trigger: ref.current, start: "top 85%", once: true } : undefined,
+              }),
+          });
+        };
+        const createSplit = contextSafe?.(createSplitNow) ?? createSplitNow;
+        const start = () => {
+          if (document.fonts.status === "loaded") createSplit();
+          else void document.fonts.ready.then(createSplit);
+        };
+        const off = waitIntro ? onIntroDone(start) : (start(), undefined);
         return () => {
+          disposed = true;
           off?.();
-          split.revert();
+          split?.revert();
         };
       });
       return () => mm.revert();
