@@ -19,7 +19,6 @@ jobs:
       contents: read
     env:
       STATIC_SITE_REPOSITORY: ${{ vars.STATIC_SITE_REPOSITORY }}
-      STATIC_SITE_MAX_SIZE_MB: ${{ vars.STATIC_SITE_MAX_SIZE_MB }}
     steps:
       - name: Checkout source repository
         uses: actions/checkout@v4
@@ -72,7 +71,7 @@ jobs:
       - name: Verify exported files
         run: pnpm verify:output
 
-      - name: Deployment preflight and size report
+      - name: Deployment preflight and output inventory
         run: pnpm deployment:preflight
 
       - name: Upload generic static-site artifact

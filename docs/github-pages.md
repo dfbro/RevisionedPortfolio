@@ -23,7 +23,7 @@ A push to `main` starts the source workflow. Manual dispatch can run the build f
 
 1. The build job checks out source and installs pnpm 11.4.0 and Node.js 24.
 2. It installs the frozen lockfile and runs lint, typecheck, unit tests, content validation, static build and output verification.
-3. It reports the output size, file count, largest files and required paths. A configurable size ceiling fails the build before publication.
+3. It reports the output size, file count, largest files and required paths. This inventory is informational; GitHub Pages applies its own published-site limit.
 4. `actions/upload-artifact@v4` stores the contents of `out/` as the generic `static-site` artifact.
 5. The dependent publish job runs only for `main`, downloads that artifact and checks out the target repository in a separate `static-site/` directory.
 6. `rsync --delete` synchronizes the contents of `out/` into the target repository root. It does not copy the `out` directory itself; it excludes `.git`, `CNAME` and `.nojekyll` from deletion/copy so those target-side files are preserved.
@@ -41,7 +41,6 @@ Set these in **dfbro/RevisionedPortfolio → Settings → Secrets and variables 
 | --- | --- | --- |
 | `STATIC_SITE_REPOSITORY` | Variable | `dfbro/RevisionedPortfolioSite` |
 | `STATIC_SITE_BRANCH` | Variable | `main` |
-| `STATIC_SITE_MAX_SIZE_MB` | Variable | `900` (optional; default is 900 MiB) |
 | `STATIC_SITE_DEPLOY_TOKEN` | Secret | Fine-grained PAT or GitHub App installation token described below |
 
 Create a fine-grained Personal Access Token with resource owner `dfbro`, repository access limited to **only** `RevisionedPortfolioSite`, and repository permission **Contents: Read and write**. No Pages permission is needed for the token because it only pushes files; GitHub Pages is already configured in the target repository. Set a reasonable expiry and rotate the credential before expiry.
@@ -92,9 +91,8 @@ The current destination is a project site, not the account-level `dfbro.github.i
 - file count and total bytes/MiB;
 - largest ten files;
 - rejection of symlinks and source/development-only paths;
-- a fail-closed size ceiling, configured by `STATIC_SITE_MAX_SIZE_MB`.
 
-The configured ceiling is 900 MiB, below the GitHub Pages published-site limit of 1 GB. Current local output is 163.26 MiB across 1,191 files. This reports the current published export, not the deployment repository's cumulative Git history or `.git` size.
+The script reports the output's current file count, total bytes/MiB and ten largest files, but does not impose a duplicate size threshold. GitHub Pages enforces its own published-site limit. The report measures the current export, not the deployment repository's cumulative Git history or `.git` size.
 
 ## Verify each stage
 

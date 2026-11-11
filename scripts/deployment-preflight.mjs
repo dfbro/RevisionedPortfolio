@@ -2,14 +2,7 @@ import { existsSync, lstatSync, readdirSync } from "node:fs";
 import path from "node:path";
 
 const OUT = path.resolve(process.cwd(), process.argv[2] ?? "out");
-const DEFAULT_LIMIT_MIB = 900;
-const configuredLimit = process.env.STATIC_SITE_MAX_SIZE_MB?.trim();
-const maxSizeMiB = configuredLimit ? Number(configuredLimit) : DEFAULT_LIMIT_MIB;
 const errors = [];
-
-if (!Number.isFinite(maxSizeMiB) || maxSizeMiB <= 0) {
-  throw new Error("STATIC_SITE_MAX_SIZE_MB must be a positive number.");
-}
 
 function walk(directory, relative = "") {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -66,7 +59,6 @@ for (const entry of forbidden) {
 
 const files = walk(OUT);
 const totalBytes = files.reduce((sum, file) => sum + file.bytes, 0);
-const maxBytes = Math.floor(maxSizeMiB * 1024 * 1024);
 const largestFiles = [...files].sort((a, b) => b.bytes - a.bytes).slice(0, 10);
 
 if (!files.some((file) => file.path.startsWith("_next/static/") && file.bytes > 0)) {
@@ -76,13 +68,6 @@ if (!files.some((file) => file.path.startsWith("assets/uploads/") && file.bytes 
   errors.push("No public upload assets were found under assets/uploads/.");
 }
 
-if (totalBytes > maxBytes) {
-  errors.push(
-    "Static output is " + (totalBytes / (1024 * 1024)).toFixed(2) +
-    " MiB, above STATIC_SITE_MAX_SIZE_MB=" + maxSizeMiB + " MiB.",
-  );
-}
-
 const report = {
   directory: OUT,
   rootIndexHtml: existsSync(path.join(OUT, "index.html")),
@@ -90,7 +75,6 @@ const report = {
   fileCount: files.length,
   totalBytes,
   totalMiB: Number((totalBytes / (1024 * 1024)).toFixed(2)),
-  maximumMiB: maxSizeMiB,
   largestFiles: largestFiles.map((file) => ({
     path: file.path,
     bytes: file.bytes,
