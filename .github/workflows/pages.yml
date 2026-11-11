@@ -98,6 +98,12 @@ jobs:
       STATIC_SITE_REPOSITORY: ${{ vars.STATIC_SITE_REPOSITORY }}
       STATIC_SITE_BRANCH: ${{ vars.STATIC_SITE_BRANCH || 'main' }}
     steps:
+      - name: Download static-site artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: static-site
+          path: ./out
+
       - name: Validate publication credentials and target
         shell: bash
         env:
@@ -121,12 +127,6 @@ jobs:
           fi
           git check-ref-format --branch "$branch" >/dev/null
           echo "Validated target $repository on branch $branch."
-
-      - name: Download static-site artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: static-site
-          path: ./out
 
       - name: Checkout final static-site repository
         uses: actions/checkout@v4
