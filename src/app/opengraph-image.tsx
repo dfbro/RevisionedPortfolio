@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 import { ogFonts } from "@/lib/og-fonts";
 
 export const alt = "Elang Dimas Syadewa (Claritys) — pwn-focused CTF writeups and projects";
+export const dynamic = "force-static";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

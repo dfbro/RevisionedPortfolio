@@ -9,8 +9,8 @@ describe("siteUrl", () => {
   it("defaults to the production domain", () => {
     expect(siteUrl()).toBe("https://claritys.web.id");
   });
-  it("reads SITE_URL at runtime and drops a trailing slash", () => {
+  it("uses the versioned site.json origin instead of a runtime environment override", () => {
     process.env.SITE_URL = "http://localhost:3007/";
-    expect(siteUrl()).toBe("http://localhost:3007");
+    expect(siteUrl()).toBe("https://claritys.web.id");
   });
 });

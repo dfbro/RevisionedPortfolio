@@ -7,7 +7,6 @@ import { breadcrumbJsonLd, jsonLdScript, pageOpenGraph } from "@/lib/seo";
 import { ids } from "@/lib/seo-graph";
 import { siteUrl } from "@/lib/site";
 
-export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [items, stats, competitions] = await Promise.all([listWriteups(), getCategoryStats(), getCompetitions()]);

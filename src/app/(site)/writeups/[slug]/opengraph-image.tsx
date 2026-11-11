@@ -1,11 +1,16 @@
 import { ImageResponse } from "next/og";
 import { ogFonts } from "@/lib/og-fonts";
-import { getWriteup } from "@/lib/data/writeups";
+import { getWriteup, listWriteups } from "@/lib/data/writeups";
 import { formatDate } from "@/lib/format";
 
 export const alt = "CTF writeup by Elang Dimas Syadewa (Claritys)";
+export const dynamic = "force-static";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+export async function generateStaticParams() {
+  return (await listWriteups()).map(({ slug }) => ({ slug }));
+}
 
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const w = await getWriteup((await params).slug);

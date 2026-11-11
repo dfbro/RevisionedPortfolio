@@ -9,6 +9,7 @@ import { RelatedWriteups } from "@/components/site/related-writeups";
 import { WriteupExport } from "@/components/site/writeup-export";
 import { getProfile } from "@/lib/data/profile";
 import { getAdjacentWriteups, getWriteup, listWriteups } from "@/lib/data/writeups";
+import { publishedSlugs } from "@/lib/content";
 import { relatedWriteups } from "@/lib/related";
 import { formatDate, readingMinutes } from "@/lib/format";
 import { renderWriteupHtml } from "@/lib/html";
@@ -16,8 +17,12 @@ import { breadcrumbJsonLd, detectLang, jsonLdScript, plainText, writeupSeoDescri
 import { ids } from "@/lib/seo-graph";
 import { siteUrl } from "@/lib/site";
 
-export const dynamic = "force-dynamic";
+export const dynamicParams = false;
 type Params = { params: Promise<{ slug: string }> };
+
+export function generateStaticParams() {
+  return publishedSlugs().map((slug) => ({ slug }));
+}
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const w = await getWriteup((await params).slug);
@@ -126,7 +131,7 @@ export default async function WriteupPage({ params }: Params) {
 
       {w.flag && <FlagReveal flag={w.flag} />}
 
-      <WriteupExport href={w.href} attachments={w.attachments} />
+      <WriteupExport slug={w.slug ?? w.id} attachments={w.attachments} />
 
       <RelatedWriteups items={related} />
 

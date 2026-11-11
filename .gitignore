@@ -6,6 +6,7 @@ out/
 *.dump
 *.tar.gz
 public/uploads/
+public/assets/exports/
 .remember/
 next-env.d.ts
 *.tsbuildinfo

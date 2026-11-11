@@ -1,86 +1,52 @@
 # Claritys — Elang Dimas Syadewa
 
-Personal site for Elang Dimas Syadewa (**Claritys**): pwn-focused CTF writeups, projects, a competition record, and a private admin to publish all of it. This rebuild replaces the old cyberpunk/terminal portfolio with an editorial layout and GSAP scroll choreography, and reads the **same PostgreSQL data** as before.
+Personal static site for Elang Dimas Syadewa (**Claritys**): pwn-focused CTF writeups, projects, achievements, and technical profile. Public content is stored as files in this repository and rendered during the build. The local CMS lives in the sibling `RevisionedPortfolioEditor` repository.
 
 ## Stack
 
-Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 + shadcn/ui · GSAP (ScrollTrigger, SplitText, ScrambleText) + Lenis · Prisma 7 + PostgreSQL 18 · Tiptap 3 · Vitest · Playwright
+Next.js 16 static export (App Router) · React 19 · TypeScript · Tailwind CSS 4 + shadcn/ui · GSAP (ScrollTrigger, SplitText, ScrambleText) + Lenis · Markdown/JSON content · Shiki · Vitest · Playwright
 
 ## Local development
 
 ```bash
-# 1. Database (any Postgres 16+ works; this is the one used in development)
-docker network create newportfolio_default
-docker run -d --name newportfolio-db --network newportfolio_default \
-  -e POSTGRES_USER=portfolio -e POSTGRES_PASSWORD=portfolio -e POSTGRES_DB=portfolio \
-  -p 127.0.0.1:5436:5432 -v newportfolio-pgdata:/var/lib/postgresql postgres:18-alpine
-
-# 2. Restore a backup (optional) and the uploads that its content references
-docker cp portfolio-YYYY-MM-DD.dump newportfolio-db:/tmp/d.dump
-docker exec newportfolio-db pg_restore -U portfolio -d portfolio --no-owner --no-acl /tmp/d.dump
-mkdir -p public && tar xzf uploads-YYYY-MM-DD.tar.gz -C public
-
-# 3. App
 pnpm install
-cp .env.example .env.local     # set ADMIN_PASSWORD and ADMIN_SESSION_SECRET (openssl rand -base64 48)
-pnpm db:migrate
-pnpm dev                        # http://localhost:3007
+pnpm dev                         # Next.js development preview at http://localhost:3007
+pnpm build                       # generates static output in out/
+pnpm start                       # serves out/ at http://127.0.0.1:3100
 ```
 
-Use a user-defined Docker network (as above): on some hosts the default `docker0` bridge is not reachable from the host.
+The public site has no database, login, upload endpoint, contact API, or request-time Next.js server. `pnpm start` is a small static file server for local preview; production hosting receives only the contents of `out/`.
 
 ## Scripts
 
 | Script | What it does |
 | --- | --- |
-| `pnpm dev` | Dev server on port 3007 |
+| `pnpm dev` | Next.js development server on port 3007 |
+| `pnpm start` / `pnpm preview:static` | Serves the built `out/` directory on loopback port 3100 |
 | `pnpm test` | Unit tests (Vitest) |
-| `pnpm e2e` | Playwright tests against a production build on port 3100 (needs the dev DB) |
+| `pnpm e2e` | Playwright tests against the exported files served without Next.js runtime |
 | `pnpm typecheck` / `pnpm lint` | Type and lint checks |
 | `pnpm check` | lint + typecheck + unit tests + build |
-| `pnpm db:migrate` | `prisma migrate deploy` |
+| `pnpm verify:content` | Validates content schemas, slugs and asset references |
+| `pnpm verify:output` | Checks generated routes, sitemap, assets and absence of server/database files |
 
 ## Deploy
 
-### Docker Compose (Coolify)
+The `pages.yml` GitHub Actions workflow runs lint, typecheck, unit tests, content validation, static export, output verification, and deploys the `out/` artifact to GitHub Pages. The production site is served entirely from static files.
 
-`docker-compose.yml` runs a single `portfolio` service against an **existing PostgreSQL** (no bundled database). Set these variables in Coolify → Environment Variables (or a `.env` next to the compose file):
+### Domain and route configuration
 
-| Variable | Notes |
-| --- | --- |
-| `DATABASE_URL` | Your existing database, e.g. `postgresql://user:pass@host:5432/db` |
-| `ADMIN_USERNAME`, `ADMIN_PASSWORD` | Admin login |
-| `ADMIN_SESSION_SECRET` | 32+ characters: `openssl rand -base64 48` |
-| `SITE_URL` | Optional, defaults to `https://claritys.web.id` (read at runtime) |
-| `ALLOW_ROOT_FALLBACK` | Optional, default `0`. Set `1` only if the logs say uploads aren't writable and you can't fix host ownership (Docker inside systemd-nspawn). Runs the app as root |
-| `TRUSTED_PROXY_HOPS` | Optional, default `1`. Ignored behind Cloudflare, where `CF-Connecting-IP` is used |
+`content/site.json` is the source for the canonical site origin, trailing-slash policy, title, description, and language. The build derives canonical metadata, Open Graph URLs, JSON-LD, sitemap, and robots output from this configuration. Changing the URL in this file does not change DNS or GitHub Pages settings; those must be configured separately.
 
-Uploads are bind-mounted from `./public/uploads`, the same path the previous version used, so existing files carry over. On start the container:
+`public/CNAME` contains the custom domain `claritys.web.id` for GitHub Pages.
 
-1. fixes ownership of `./public/uploads` (older deployments wrote it as root), then drops to an unprivileged user. If the host forbids that (e.g. Docker inside systemd-nspawn), it stays unprivileged and logs an error, unless `ALLOW_ROOT_FALLBACK=1`;
-2. runs `prisma migrate deploy`. Migrations are additive, so the database does not need a restart and the previous version keeps working against it;
-3. starts the server on port 3000, published only on `127.0.0.1:3020`.
+### Editing content
 
-### Public access via Cloudflare Tunnel
+Run the sibling local editor from `../RevisionedPortfolioEditor`. It reads and writes this repository's `content/` and `public/assets/` directly. There is no second content database. Save changes locally, review the Git diff, then explicitly commit and push. GitHub Actions handles the build and deployment.
 
-`cloudflared` on the host forwards the domain to the published port. In `/etc/cloudflared/<account>/config.yml`:
+### Data migration archive
 
-```yaml
-  - hostname: claritys.web.id
-    service: http://localhost:3020
-```
-
-then `sudo systemctl restart cloudflared` (or your unit name). The previous site used `localhost:3015`, so both can run side by side. Deploy the new one and check `curl -I http://localhost:3020` before switching the tunnel. To roll back, point the tunnel at 3015 again.
-
-Restoring a backup into a fresh setup: `DATABASE_URL=... scripts/restore.sh portfolio-YYYY-MM-DD.dump uploads-YYYY-MM-DD.tar.gz`.
-
-### Rolling back
-
-The previous site lives on the `legacy-v1` branch. Point the deployment at it and redeploy (or, during the cutover, point the tunnel back at `localhost:3015`). The database changes made by this version (one nullable column, one index) are compatible with it.
-
-## Admin
-
-`/admin` signs in with `ADMIN_USERNAME` / `ADMIN_PASSWORD`, and the session lasts 8 hours. Every attempt lands in **Access logs**, and logins are rate-limited to 5 per 10 minutes per IP. From the admin you can manage writeups (rich editor, PDF/Notion import, attachments, flag), projects, achievements, profile and SEO, contact messages, and uploads.
+The old PostgreSQL/Prisma runtime and deployment files have been removed from this public repository. A read-only copy of the old runtime configuration and migration report is retained under the workspace-level `legacy-archive/`; it is not part of this repository or the static output. Do not publish SQL dumps, credentials, private contact messages, access logs, or unreviewed fields from the old system.
 
 ## Design rules
 
@@ -88,8 +54,10 @@ The site is editorial first. Large Archivo type, one accent (`#FF5B1F`), mono on
 
 1. The hero role line decrypts once.
 2. Section indexes are hex (`0x01 / about`).
-3. Writeup flags are redacted until clicked.
+3. Writeup flags are visually redacted until clicked.
 4. The nav shows scroll progress as `0x0000 → 0xFFFF`.
 5. The footer's giant `ELANG` occasionally glitches into `CLARITYS`. Its timing lives in `src/lib/glitch.ts`.
 
-Every animation is disabled or reduced under `prefers-reduced-motion`, and content is never hidden when JavaScript is unavailable.
+Every animation is disabled or reduced under `prefers-reduced-motion`, and the article/page content is rendered into HTML at build time rather than requiring a client-side data fetch.
+
+**Flag visibility note:** the reveal mask is presentation only. Published flags are included in the static page payload, the public MDX files, and the Markdown/HTML exports. Do not store operational secrets in this field.

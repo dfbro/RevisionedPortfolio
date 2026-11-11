@@ -4,7 +4,7 @@ test("home renders real content without horizontal overflow", async ({ page }) =
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("ELANG");
   await expect(page.getByText("pwn · rev · web exploit")).toBeVisible();
-  await expect(page.locator(`a[href="/writeups/pwn-truman"]`).first()).toBeAttached();
+  await expect(page.locator("main ol a[href^='/writeups/']").first()).toBeAttached();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
 });
@@ -40,10 +40,10 @@ test("all sections become visible after scrolling (nothing stuck at opacity 0)",
   expect(hidden).toEqual([]);
 });
 
-test("writeup article loads uploads images and reveals flag", async ({ page }) => {
+test("writeup article loads static uploads and reveals flag", async ({ page }) => {
   const statuses: number[] = [];
   page.on("response", (r) => {
-    if (r.url().includes("/api/public/uploads/")) statuses.push(r.status());
+    if (r.url().includes("/assets/uploads/")) statuses.push(r.status());
   });
   await page.goto("/writeups/pwn-truman");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Truman");
@@ -57,24 +57,25 @@ test("writeup article loads uploads images and reveals flag", async ({ page }) =
   }
 });
 
-test("legacy /ctf URL redirects permanently", async ({ request }) => {
-  const res = await request.get("/ctf/pwn-truman", { maxRedirects: 0 });
-  expect(res.status()).toBe(308);
-  expect(res.headers()["location"]).toContain("/writeups/pwn-truman");
+test("legacy /ctf URL is served as a static alias to the canonical writeup", async ({ request }) => {
+  const response = await request.get("/ctf/pwn-truman");
+  expect(response.status()).toBe(200);
+  const html = await response.text();
+  expect(html).toContain('http-equiv="refresh"');
+  expect(html).toContain("/writeups/pwn-truman");
 });
 
 test("writeups filter narrows to pwn", async ({ page }) => {
   await page.goto("/writeups");
+  const resultCount = page.getByText(/^\d+ results$/);
+  const allCount = Number((await resultCount.textContent())?.match(/^\d+/)?.[0] ?? 0);
   await page.getByRole("button", { name: "Pwn", exact: true }).click();
-  await expect(page.getByText(/^23 results$/)).toBeVisible();
-});
-
-test("contact honeypot is accepted but silent", async ({ request }) => {
-  const res = await request.post("/api/contact", {
-    data: { name: "bot", contact: "bot@x", message: "buy cheap stuff now", website: "http://spam" },
-    headers: { "x-forwarded-for": "203.0.113.9" },
-  });
-  expect(res.status()).toBe(201);
+  await expect(resultCount).toBeVisible();
+  const pwnCount = Number((await resultCount.textContent())?.match(/^\d+/)?.[0] ?? 0);
+  expect(pwnCount).toBeGreaterThan(0);
+  expect(pwnCount).toBeLessThan(allCount);
+  await expect(page.getByRole("button", { name: "Pwn", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("main ol li")).toHaveCount(pwnCount);
 });
 
 test("about strip opens on cybersecurity and follows the pointer", async ({ page }, info) => {
@@ -90,17 +91,14 @@ test("about strip opens on cybersecurity and follows the pointer", async ({ page
   await expect(cell("Cybersecurity")).not.toHaveAttribute("data-on");
 });
 
-test("contact chat greets, then answers a sent message", async ({ page }) => {
-  await page.route("**/api/contact", (route) => route.fulfill({ status: 201, json: { ok: true } }));
+test("contact opens a mail draft and explains the visitor must send it", async ({ page }) => {
   await page.goto("/about");
   await page.locator("#contact").scrollIntoViewIfNeeded();
-  await expect(page.getByText("Got a binary for me?")).toBeVisible({ timeout: 8000 });
-  await page.getByPlaceholder("Name").fill("Ada Lovelace");
-  await page.getByPlaceholder("Email / handle").fill("ada@example.com");
-  await page.getByPlaceholder("Write me a message…").fill("Want to join our CTF team?");
-  await page.getByRole("button", { name: "Send message" }).click();
-  await expect(page.getByText("Want to join our CTF team?")).toBeVisible();
-  await expect(page.getByText("Received, Ada. I'll get back to you soon.")).toBeVisible({ timeout: 5000 });
+  const emailLink = page.locator('#contact a[href^="mailto:"]');
+  await expect(emailLink).toBeVisible();
+  await expect(emailLink).toHaveAttribute("href", /subject=Portfolio%20Inquiry/);
+  await expect(page.getByText("Your email app will open with a draft. Review it and press Send there.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Copy email address" })).toBeVisible();
 });
 
 test("404 page", async ({ page }) => {
@@ -128,15 +126,22 @@ test("writeup code blocks show a language and copy their contents", async ({ pag
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain("#include");
 });
 
-test("PDF export loads every image and opens the print dialog", async ({ page }) => {
+test("writeup export downloads static HTML and Markdown and can print", async ({ page }) => {
   await page.addInitScript(() => {
     (window as unknown as { printed: number }).printed = 0;
     window.print = () => void (window as unknown as { printed: number }).printed++;
   });
-  await page.goto("/writeups/pwn-truman/print");
-  await expect.poll(() => page.evaluate(() => (window as unknown as { printed: number }).printed), { timeout: 20000 }).toBe(1);
-  const unloaded = await page.$$eval("img", (imgs) => imgs.filter((i) => !i.complete || !i.naturalWidth).length);
-  expect(unloaded).toBe(0);
+  await page.goto("/writeups/pwn-truman");
+  const htmlLink = page.locator('a[href="/assets/exports/pwn-truman.html"]');
+  const markdownLink = page.locator('a[href="/assets/exports/pwn-truman.md"]');
+  await expect(htmlLink).toBeVisible();
+  await expect(markdownLink).toBeVisible();
+  const htmlResponse = await page.request.get(new URL("/assets/exports/pwn-truman.html", page.url()).toString());
+  const markdownResponse = await page.request.get(new URL("/assets/exports/pwn-truman.md", page.url()).toString());
+  expect(htmlResponse.status()).toBe(200);
+  expect(markdownResponse.status()).toBe(200);
+  await page.getByRole("button", { name: "PDF" }).click();
+  expect(await page.evaluate(() => (window as unknown as { printed: number }).printed)).toBe(1);
 });
 
 test("achievement title opens the certificate preview in place", async ({ page }) => {

@@ -17,7 +17,6 @@ import { listProjects } from "@/lib/data/projects";
 import { getCategoryStats, listWriteups } from "@/lib/data/writeups";
 import { pageOpenGraph, truncate } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
 export async function generateMetadata(): Promise<Metadata> {
   const [p, writeups, stats] = await Promise.all([getProfile(), listWriteups(), getCategoryStats()]);
   const pwn = stats.find((s) => s.category === "Pwn")?.count ?? 0;

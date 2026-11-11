@@ -7,7 +7,6 @@ import { breadcrumbJsonLd, jsonLdScript, pageOpenGraph, truncate } from "@/lib/s
 import { ids } from "@/lib/seo-graph";
 import { siteUrl } from "@/lib/site";
 
-export const dynamic = "force-dynamic";
 export async function generateMetadata(): Promise<Metadata> {
   const items = await listAchievements();
   const notable = items.filter((a) => a.weight >= 4).map((a) => a.title.split(" – ")[0]);

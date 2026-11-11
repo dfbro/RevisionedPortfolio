@@ -6,6 +6,7 @@ import rehypeSanitize, { defaultSchema, type Options as SanitizeSchema } from "r
 import rehypeSlug from "rehype-slug";
 import rehypeStringify from "rehype-stringify";
 import type { BundledLanguage } from "shiki";
+import { marked } from "marked";
 import { unified } from "unified";
 import { visit } from "unist-util-visit";
 import { guessLanguage } from "@/lib/lang-guess";
@@ -131,7 +132,9 @@ const processor = unified()
   .use(rehypeStringify);
 
 export async function renderWriteupHtml(input: string, opts: { altPrefix?: string } = {}) {
-  const file = await processor.process({ value: input, data: { altPrefix: opts.altPrefix } });
+  // File-backed writeups are Markdown; raw legacy HTML remains valid Markdown input too.
+  const source = marked.parse(input, { async: false, gfm: true });
+  const file = await processor.process({ value: source, data: { altPrefix: opts.altPrefix } });
   return { html: String(file), toc: (file.data.toc as TocItem[] | undefined) ?? [] };
 }
 
