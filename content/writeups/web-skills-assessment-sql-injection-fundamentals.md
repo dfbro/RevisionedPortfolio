@@ -11,12 +11,15 @@ tags: ["SQL Injection", "SQLi"]
 status: "published"
 flag: "HTB{go_copy_that_manually_if_you_really_need_it_that_BAD!}"
 attachments: []
-source: "https://claritys.web.id/writeups/web-skills-assessment-sql-injection-fundamentals"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-skills-assessment-sql-injection-fundamentals"
 ---
 
 # Skills Assessment - SQL Injection Fundamentals
 
-> This is a Hack The Box module but about SQL Injection. But the last Section is a real challenge like CTF but with quiz based.  https://academy.hackthebox.com/app/module/33/ https://academy.hackthebox.com/app/module/33/section/518
+> This is a Hack The Box module but about SQL Injection. But the last Section is a real challenge like CTF but with quiz based.
+ 
+ https://academy.hackthebox.com/app/module/33/
+ https://academy.hackthebox.com/app/module/33/section/518
 
 ## Recon
 

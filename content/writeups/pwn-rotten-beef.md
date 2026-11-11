@@ -11,7 +11,7 @@ tags: ["Arbitrary Write", "format string"]
 status: "published"
 flag: "Alpaca{format_str1ng_is_s0_fun}"
 attachments: []
-source: "https://claritys.web.id/writeups/pwn-rotten-beef"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-rotten-beef"
 ---
 
 # Rotten Beef

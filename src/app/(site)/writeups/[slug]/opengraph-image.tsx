@@ -27,7 +27,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 28, borderTop: "2px solid #2a2925", paddingTop: 28 }}>
           <span style={{ color: "#9a978f" }}>{meta}</span>
           <span>
-            Elang Dimas Syadewa&nbsp;·&nbsp;<span style={{ color: "#FF5B1F" }}>claritys.web.id</span>
+            Elang Dimas Syadewa&nbsp;·&nbsp;<span style={{ color: "#FF5B1F" }}>dfbro.github.io</span>
           </span>
         </div>
       </div>

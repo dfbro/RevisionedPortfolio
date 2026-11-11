@@ -11,7 +11,7 @@ tags: ["PWN", "Hard", "Sanitized Bufferoverflow"]
 status: "published"
 flag: "TBCTF{r0p_byp4551ng_ch4r5_4r3_s0_3z}"
 attachments: []
-source: "https://claritys.web.id/writeups/pwn-banned-bytes"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-banned-bytes"
 ---
 
 # Banned Bytes

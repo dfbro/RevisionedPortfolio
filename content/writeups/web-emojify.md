@@ -11,7 +11,7 @@ tags: ["WAF", "SSRF"]
 status: "published"
 flag: "Alpaca{Sup3r_Speci4l_Rar3_Flag}"
 attachments: []
-source: "https://claritys.web.id/writeups/web-emojify"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-emojify"
 ---
 
 # Emojify

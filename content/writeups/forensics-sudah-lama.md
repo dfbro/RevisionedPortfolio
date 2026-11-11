@@ -11,7 +11,7 @@ tags: ["Forensic", "Medium", "USB", "PCAP"]
 status: "published"
 flag: "BeeCTF{sud4h_l4ma_t1dak_bu4t_s0al_s3p3rti_1ni}"
 attachments: []
-source: "https://claritys.web.id/writeups/forensics-sudah-lama"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-sudah-lama"
 ---
 
 # Sudah lama

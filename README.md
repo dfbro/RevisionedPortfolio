@@ -38,7 +38,7 @@ The `pages.yml` GitHub Actions workflow runs lint, typecheck, unit tests, conten
 
 `content/site.json` is the source for the canonical site origin, trailing-slash policy, title, description, and language. The build derives canonical metadata, Open Graph URLs, JSON-LD, sitemap, and robots output from this configuration. Changing the URL in this file does not change DNS or GitHub Pages settings; those must be configured separately.
 
-`public/CNAME` contains the custom domain `claritys.web.id` for GitHub Pages.
+GitHub Pages serves this project at `https://dfbro.github.io/RevisionedPortfolio/`; `next.config.ts` sets the matching project-site base path. No custom domain or DNS ownership is required.
 
 ### Editing content
 

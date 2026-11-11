@@ -11,7 +11,7 @@ tags: ["PWN", "ROP", "Hands-on", "Medium", "x64", "ret2libc"]
 status: "published"
 flag: "SHELL"
 attachments: []
-source: "https://claritys.web.id/writeups/pwn-hsr-64"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-hsr-64"
 ---
 
 # hsr_64

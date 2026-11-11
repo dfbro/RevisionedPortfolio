@@ -10,5 +10,5 @@ export function siteUrl(): string {
   } catch {
     // Keep local development usable before the first content snapshot exists.
   }
-  return "https://claritys.web.id";
+  return "https://dfbro.github.io/RevisionedPortfolio";
 }

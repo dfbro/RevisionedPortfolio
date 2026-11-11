@@ -19,7 +19,7 @@ export default async function Image() {
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 30, borderTop: "2px solid #2a2925", paddingTop: 28 }}>
           <span style={{ letterSpacing: 4 }}>pwn · rev · webexploit</span>
-          <span style={{ color: "#FF5B1F" }}>claritys.web.id</span>
+          <span style={{ color: "#FF5B1F" }}>dfbro.github.io</span>
         </div>
       </div>
     ),

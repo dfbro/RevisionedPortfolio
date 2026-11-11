@@ -11,7 +11,7 @@ tags: ["boot2root", "Web Exploitation", "obfuscated", "CVE"]
 status: "published"
 flag: "HTB{type_it_manually_if_you_want_but_better_you_do_it_yourself}"
 attachments: []
-source: "https://claritys.web.id/writeups/web-two-million"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-two-million"
 ---
 
 # Two Million

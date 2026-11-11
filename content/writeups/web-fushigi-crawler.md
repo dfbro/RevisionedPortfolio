@@ -11,7 +11,7 @@ tags: ["Crawler"]
 status: "published"
 flag: "Alpaca{CRAWLER_IS_SUGOI!}"
 attachments: []
-source: "https://claritys.web.id/writeups/web-fushigi-crawler"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-fushigi-crawler"
 ---
 
 # Fushigi Crawler

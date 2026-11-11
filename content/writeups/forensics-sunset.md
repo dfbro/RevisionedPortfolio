@@ -11,7 +11,7 @@ tags: ["Forensic", "Stegano", "Medium"]
 status: "published"
 flag: "flag{9e068194-a2a5-4e4b-bf95-b85a9ca7d7fe}"
 attachments: []
-source: "https://claritys.web.id/writeups/forensics-sunset"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-sunset"
 ---
 
 # Sunset

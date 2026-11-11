@@ -11,7 +11,7 @@ tags: ["PWN", "ROP", "Hands-on", "Easy", "x64", "ret2shellcode"]
 status: "published"
 flag: "SHELL"
 attachments: []
-source: "https://claritys.web.id/writeups/pwn-ret2shellcode-2"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-ret2shellcode-2"
 ---
 
 # ret2shellcode

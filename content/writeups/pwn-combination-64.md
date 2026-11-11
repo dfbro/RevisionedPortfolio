@@ -11,7 +11,7 @@ tags: ["PWN", "ROP", "Hands-on", "Medium", "x64", "ret2plt", "ret2libc"]
 status: "published"
 flag: "SHELL"
 attachments: []
-source: "https://claritys.web.id/writeups/pwn-combination-64"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-combination-64"
 ---
 
 # combination_64

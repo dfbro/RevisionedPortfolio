@@ -6,7 +6,7 @@
     "dev": "next dev -p 3007",
     "start": "node scripts/serve-static.mjs",
     "preview:static": "node scripts/serve-static.mjs",
-    "build": "node scripts/prepare-static-exports.mjs && next build",
+    "build": "node scripts/prepare-static-exports.mjs && next build && node scripts/postprocess-pages-paths.mjs",
     "lint": "eslint .",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",

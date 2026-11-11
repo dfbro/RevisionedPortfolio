@@ -11,7 +11,7 @@ tags: ["XSS", "bot", "Crawler", "Fetcher", "Attribute Injection"]
 status: "published"
 flag: "Alpaca{Client_s1de_ch4llenges_ar3_fun}"
 attachments: []
-source: "https://claritys.web.id/writeups/web-animal-viewer"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-animal-viewer"
 ---
 
 # Animal Viewer
@@ -120,7 +120,7 @@ const html = `
 ---snippet---
 
       </li>
-      <img src="https://claritys.web.id/[ANIMAL].png">
+      <img src="https://dfbro.github.io/RevisionedPortfolio/[ANIMAL].png">
   </body>
 </html>
 `;

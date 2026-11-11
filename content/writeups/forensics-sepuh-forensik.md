@@ -11,7 +11,7 @@ tags: ["Forensics", "PCAP", "MISC", "Medium"]
 status: "published"
 flag: "SCTF{53pUh_f0r3n5iK_b312aK51_4mPun_puH_s838823}"
 attachments: []
-source: "https://claritys.web.id/writeups/forensics-sepuh-forensik"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-sepuh-forensik"
 ---
 
 # Sepuh Forensik

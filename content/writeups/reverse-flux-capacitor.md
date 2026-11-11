@@ -11,7 +11,7 @@ tags: ["Reverse Engineering", "XOR"]
 status: "published"
 flag: "BeeCTF{flUx_cApAc1t0r_d3crYpt3d_sUcc3ss_djb21s34sy}"
 attachments: []
-source: "https://claritys.web.id/writeups/reverse-flux-capacitor"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/reverse-flux-capacitor"
 ---
 
 # Flux Capacitor

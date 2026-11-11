@@ -11,7 +11,7 @@ tags: ["MISC", "Symbol-Only Bash Escape", "Hard"]
 status: "published"
 flag: "TBCTF{r357r1c73d_bu7_n07_1mp0551bl3}"
 attachments: []
-source: "https://claritys.web.id/writeups/pwn-nash-jail"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-nash-jail"
 ---
 
 # Nash Jail

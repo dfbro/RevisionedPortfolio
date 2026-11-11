@@ -11,7 +11,7 @@ tags: ["Buffer Overflow"]
 status: "published"
 flag: "Alpaca{h0w_d1d_U_gu3s5_i7}"
 attachments: []
-source: "https://claritys.web.id/writeups/pwn-login-bonus"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-login-bonus"
 ---
 
 # login bonus

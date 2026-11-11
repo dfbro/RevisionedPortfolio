@@ -5,6 +5,7 @@ const site = JSON.parse(readFileSync(new URL("./content/site.json", import.meta.
 
 const nextConfig: NextConfig = {
   output: "export",
+  basePath: "/RevisionedPortfolio",
   trailingSlash: site.trailingSlash ?? true,
   poweredByHeader: false,
   images: {

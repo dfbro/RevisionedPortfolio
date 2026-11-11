@@ -11,7 +11,7 @@ tags: ["Forensic", "Medium", "Disk"]
 status: "published"
 flag: "NCLPS1{t4k_kus4ngkA_t3rny4Ta_fl4gny4_b3rsembuny1_09217b9c25}"
 attachments: []
-source: "https://claritys.web.id/writeups/forensics-evaporated"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-evaporated"
 ---
 
 # Evaporated

@@ -11,7 +11,7 @@ tags: ["PWN", "UAF", "ret2libc", "heap", "tcache", "shell", "PIE", "x64", "mediu
 status: "published"
 flag: "BeeCTF{gut3nm0rg3n_s3l4m4ts14ng_k0nb4w4!}"
 attachments: []
-source: "https://claritys.web.id/writeups/pwn-truman"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-truman"
 ---
 
 # Truman

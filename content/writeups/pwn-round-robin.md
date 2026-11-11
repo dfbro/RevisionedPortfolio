@@ -11,7 +11,7 @@ tags: ["PWN", "Medium", "GOT Overwrite"]
 status: "published"
 flag: "SCTF26{r0und_r0b1n_scheduler_n1ghtm4re_72918403a}"
 attachments: [{"url": "/assets/uploads/788c0054-2f0c-4e0e-a0e3-1273cc785ba2-round_robin.zip", "name": "788c0054-2f0c-4e0e-a0e3-1273cc785ba2-round_robin.zip", "contentType": "application/octet-stream"}]
-source: "https://claritys.web.id/writeups/pwn-round-robin"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-round-robin"
 ---
 
 # Round Robin

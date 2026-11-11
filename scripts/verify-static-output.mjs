@@ -52,7 +52,7 @@ const published = walkFiles(path.join(CONTENT, "writeups"))
 
 if (!existsSync(OUT)) fail("Missing out/ directory; run the production build first.");
 
-for (const route of ["index.html", "about/index.html", "projects/index.html", "achievements/index.html", "writeups/index.html", "ctf/index.html", "links/index.html", "robots.txt", "sitemap.xml", "CNAME"]) {
+for (const route of ["index.html", "about/index.html", "projects/index.html", "achievements/index.html", "writeups/index.html", "ctf/index.html", "links/index.html", "robots.txt", "sitemap.xml"]) {
   if (!existsSync(path.join(OUT, route))) fail("Missing static output: " + route);
 }
 

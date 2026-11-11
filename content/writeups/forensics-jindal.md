@@ -11,7 +11,7 @@ tags: ["Forensic", "Stegano", "Easy"]
 status: "published"
 flag: "psych{w311_d0n3_sp4c3s_4r3n7_4lw4y5_3mpty}"
 attachments: []
-source: "https://claritys.web.id/writeups/forensics-jindal"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-jindal"
 ---
 
 # Jindal

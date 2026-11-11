@@ -103,7 +103,7 @@ const DEFAULT_PROFILE: Profile = {
   alias: "Claritys",
   brand: "Claritys",
   email: null,
-  websiteUrl: "https://claritys.web.id",
+  websiteUrl: "https://dfbro.github.io/RevisionedPortfolio",
   githubUrl: "https://github.com/Claritys11",
   instagramUrl: null,
   profileImageUrl: "/profile.jpg",

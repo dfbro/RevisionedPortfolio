@@ -11,7 +11,7 @@ tags: ["Web Exploitation", "LaTex"]
 status: "published"
 flag: "BeeCTF{Duh_dismathlagi_dismathLagi_disssnutz_hehehehheeh_galucu_ya:(}"
 attachments: []
-source: "https://claritys.web.id/writeups/web-math6025-discrete-mathematics"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-math6025-discrete-mathematics"
 ---
 
 # MATH6025 - Discrete Mathematics

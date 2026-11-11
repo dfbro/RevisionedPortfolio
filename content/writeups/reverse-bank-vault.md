@@ -11,7 +11,7 @@ tags: ["Reverse Engineering", "Medium", "Keycheck"]
 status: "published"
 flag: "SCTF26{w3lc0m3_t0_th3_v4ult_p1n_9147487905852048613}"
 attachments: [{"url": "/assets/uploads/388f3f8d-7bee-494d-be8e-3b9b2e77271c-bank_vault.zip", "name": "388f3f8d-7bee-494d-be8e-3b9b2e77271c-bank_vault.zip", "contentType": "application/octet-stream"}]
-source: "https://claritys.web.id/writeups/reverse-bank-vault"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/reverse-bank-vault"
 ---
 
 # Bank Vault

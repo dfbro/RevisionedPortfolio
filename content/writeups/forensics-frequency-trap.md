@@ -11,7 +11,7 @@ tags: ["Forensic", "DCT", "Easy-Medium"]
 status: "published"
 flag: "TBCTF{frequency_trap_successful}"
 attachments: []
-source: "https://claritys.web.id/writeups/forensics-frequency-trap"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-frequency-trap"
 ---
 
 # Frequency Trap

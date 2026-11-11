@@ -11,7 +11,7 @@ tags: ["PWN", "ROP", "Hands-on", "Medium", "x86", "ret2plt", "ret2libc"]
 status: "published"
 flag: "SHELL"
 attachments: []
-source: "https://claritys.web.id/writeups/pwn-combination-32"
+source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-combination-32"
 ---
 
 # combination_32
