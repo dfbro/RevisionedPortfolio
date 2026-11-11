@@ -11,7 +11,7 @@ tags: ["PWN", "Medium", "Stack & Heap"]
 status: "published"
 flag: "SCTF26{duh_puh_pwn_st4ck_d1tambah_h3ap_1ni_m4h_b4hl1l_jug4_b1ngng}"
 attachments: [{"url": "/assets/uploads/d591f01b-d4aa-4e2e-8a57-48f894fe2970-abbys", "name": "d591f01b-d4aa-4e2e-8a57-48f894fe2970-abbys", "contentType": "application/octet-stream"}]
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-abbys"
+source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/pwn-abbys"
 ---
 
 # Abbys

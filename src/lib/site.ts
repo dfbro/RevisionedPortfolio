@@ -3,6 +3,15 @@ import path from "node:path";
 
 /** The configured origin is part of versioned site content, so SEO and sitemap share one source. */
 export function siteUrl(): string {
+  const override = process.env.STATIC_SITE_URL?.trim();
+  if (override) {
+    try {
+      const parsed = new URL(override);
+      if (parsed.protocol === "https:" || parsed.protocol === "http:") return override.replace(/\/+$/, "");
+    } catch {
+      // Fall back to the versioned site configuration when the override is malformed.
+    }
+  }
   try {
     const configPath = path.join(process.cwd(), "content", "site.json");
     const config = JSON.parse(readFileSync(configPath, "utf8")) as { url?: unknown };
@@ -10,5 +19,5 @@ export function siteUrl(): string {
   } catch {
     // Keep local development usable before the first content snapshot exists.
   }
-  return "https://dfbro.github.io/RevisionedPortfolio";
+  return "https://dfbro.github.io/RevisionedPortfolioSite";
 }

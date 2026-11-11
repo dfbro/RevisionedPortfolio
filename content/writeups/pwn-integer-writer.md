@@ -11,7 +11,7 @@ tags: ["Out Of Bounds", "Negative Integer", "Stack"]
 status: "published"
 flag: "Alpaca{D0_y0u_th1nk_th3_st4ck_gr0ws_upw4rd_0r_d0wnw4rd?}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-integer-writer"
+source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/pwn-integer-writer"
 ---
 
 # Integer Writer

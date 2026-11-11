@@ -11,7 +11,7 @@ tags: ["PWN", "ROP", "Hands-on", "Easy", "x86", "ret2param"]
 status: "published"
 flag: "SHELL"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-ret2param"
+source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/pwn-ret2param"
 ---
 
 # ret2param

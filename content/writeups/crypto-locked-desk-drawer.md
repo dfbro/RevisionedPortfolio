@@ -11,7 +11,7 @@ tags: ["MISC", "Medium", "AES"]
 status: "published"
 flag: "FGTE{MISC_MASTERED}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/crypto-locked-desk-drawer"
+source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/crypto-locked-desk-drawer"
 ---
 
 # Locked Desk Drawer

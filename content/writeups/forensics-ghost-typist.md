@@ -11,7 +11,7 @@ tags: ["MISC", "Medium", "First Blood"]
 status: "published"
 flag: "FGTE0{Gh0st_C0m1ts_K3yL0g5_4nd_3nv_Dump5}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-ghost-typist"
+source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/forensics-ghost-typist"
 ---
 
 # Ghost Typist

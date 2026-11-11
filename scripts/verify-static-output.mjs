@@ -60,7 +60,7 @@ const sitemapPath = path.join(OUT, "sitemap.xml");
 let sitemap = "";
 if (existsSync(sitemapPath)) sitemap = readFileSync(sitemapPath, "utf8");
 const sitemapUrls = [...sitemap.matchAll(new RegExp("<loc>([^<]+)</loc>", "g"))].map((match) => match[1]);
-const origin = site?.url?.replace(/\/+$/, "");
+const origin = (process.env.STATIC_SITE_URL || site?.url)?.replace(/\/+$/, "");
 if (origin && sitemapUrls.some((url) => !url.startsWith(origin + "/") && url !== origin)) {
   fail("Sitemap contains a URL outside the configured site origin.");
 }

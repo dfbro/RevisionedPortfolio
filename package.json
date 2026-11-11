@@ -13,7 +13,8 @@
     "e2e": "playwright test",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "verify:content": "node scripts/verify-content.mjs",
-    "verify:output": "node scripts/verify-static-output.mjs"
+    "verify:output": "node scripts/verify-static-output.mjs",
+    "deployment:preflight": "node scripts/deployment-preflight.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

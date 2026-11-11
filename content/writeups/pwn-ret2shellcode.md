@@ -11,7 +11,7 @@ tags: ["PWN", "ROP", "Hands-on", "Easy", "x86", "ret2shellcode"]
 status: "published"
 flag: "SHELL"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-ret2shellcode"
+source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/pwn-ret2shellcode"
 ---
 
 # ret2shellcode

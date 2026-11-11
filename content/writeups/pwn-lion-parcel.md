@@ -11,7 +11,7 @@ tags: ["ret2libc", "Buffer Overflow", "GOT Overwrite"]
 status: "published"
 flag: "PLAYITPLUS{4ee458a53ab498aaa7958bb6855a55ef339917d48a0753c4e9b1fc868837396e}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-lion-parcel"
+source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/pwn-lion-parcel"
 ---
 
 # Lion Parcel

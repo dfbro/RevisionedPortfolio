@@ -11,7 +11,7 @@ tags: ["SQL Injection", "SQLi"]
 status: "published"
 flag: "HTB{go_copy_that_manually_if_you_really_need_it_that_BAD!}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/web-skills-assessment-sql-injection-fundamentals"
+source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/web-skills-assessment-sql-injection-fundamentals"
 ---
 
 # Skills Assessment - SQL Injection Fundamentals

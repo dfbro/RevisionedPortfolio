@@ -11,7 +11,7 @@ tags: ["PWN", "ROP", "Hands-on", "Medium", "x86", "ret2libc"]
 status: "published"
 flag: "SHELL"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-hsr-32"
+source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/pwn-hsr-32"
 ---
 
 # hsr_32

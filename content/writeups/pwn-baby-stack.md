@@ -11,7 +11,7 @@ tags: ["PWN", "Easy", "Stack Overflow"]
 status: "published"
 flag: "FGTE{B4bY_sT4ck_0verflow_1s_V3ry_D4ng3r0us!}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-baby-stack"
+source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/pwn-baby-stack"
 ---
 
 # baby-stack

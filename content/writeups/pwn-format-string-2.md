@@ -11,7 +11,7 @@ tags: ["ROP", "format string"]
 status: "published"
 flag: "academy{type_it_manually_if_you_want_but_better_you_do_it_yourself}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/pwn-format-string-2"
+source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/pwn-format-string-2"
 ---
 
 # Format String 2

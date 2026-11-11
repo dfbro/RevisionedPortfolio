@@ -11,7 +11,7 @@ tags: ["Forensic", "Network Analyst", "PCAP", "Hard"]
 status: "published"
 flag: "FGTE0{echo \"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBWOva1ZYUQ8FvZXcCu4b+VDLU0R4qVjs4sIkK4yUpdA root@ms.ariaf.my.id\" > /home/aria/.ssh/authorized_keys}"
 attachments: []
-source: "https://dfbro.github.io/RevisionedPortfolio/writeups/forensics-cms-persistence-via-custom-c2"
+source: "https://dfbro.github.io/RevisionedPortfolioSite/writeups/forensics-cms-persistence-via-custom-c2"
 ---
 
 # CMS - Persistence via Custom C2

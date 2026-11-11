@@ -4,7 +4,7 @@ test("home renders real content without horizontal overflow", async ({ page }) =
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("ELANG");
   await expect(page.getByText("pwn · rev · web exploit")).toBeVisible();
-  await expect(page.locator("main ol a[href^='/writeups/']").first()).toBeAttached();
+  await expect(page.locator("main ol a[href^='/RevisionedPortfolioSite/writeups/']").first()).toBeAttached();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
 });
@@ -132,12 +132,12 @@ test("writeup export downloads static HTML and Markdown and can print", async ({
     window.print = () => void (window as unknown as { printed: number }).printed++;
   });
   await page.goto("/writeups/pwn-truman");
-  const htmlLink = page.locator('a[href="/assets/exports/pwn-truman.html"]');
-  const markdownLink = page.locator('a[href="/assets/exports/pwn-truman.md"]');
+  const htmlLink = page.locator('a[href="/RevisionedPortfolioSite/assets/exports/pwn-truman.html"]');
+  const markdownLink = page.locator('a[href="/RevisionedPortfolioSite/assets/exports/pwn-truman.md"]');
   await expect(htmlLink).toBeVisible();
   await expect(markdownLink).toBeVisible();
-  const htmlResponse = await page.request.get(new URL("/assets/exports/pwn-truman.html", page.url()).toString());
-  const markdownResponse = await page.request.get(new URL("/assets/exports/pwn-truman.md", page.url()).toString());
+  const htmlResponse = await page.request.get(new URL("/RevisionedPortfolioSite/assets/exports/pwn-truman.html", page.url()).toString());
+  const markdownResponse = await page.request.get(new URL("/RevisionedPortfolioSite/assets/exports/pwn-truman.md", page.url()).toString());
   expect(htmlResponse.status()).toBe(200);
   expect(markdownResponse.status()).toBe(200);
   await page.getByRole("button", { name: "PDF" }).click();
