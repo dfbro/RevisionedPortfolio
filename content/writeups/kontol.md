@@ -4,7 +4,7 @@ title: "test"
 competition: "test"
 category: "Pwn"
 difficulty: "Medium"
-date: null
+date: "2026-11-12"
 updated: "2026-11-12"
 summary: "jadi gini gak tau"
 tags: ["RET2LIBC"]
@@ -13,4 +13,4 @@ flag: "ambatukam"
 attachments: []
 ---
 
-<p>son</p>
+<p>son - edit 18:01</p>
