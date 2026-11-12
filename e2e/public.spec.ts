@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
+import { readFileSync } from "node:fs";
 
-const BASE_PATH = "/RevisionedPortfolio";
+const SITE = JSON.parse(readFileSync("content/site.json", "utf8")) as { basePath?: string };
+const BASE_PATH = SITE.basePath === "/" || !SITE.basePath ? "" : `/${SITE.basePath.split("/").filter(Boolean).join("/")}`;
 const sitePath = (path = "") => `${BASE_PATH}/${path}`;
 
 async function clickPrimaryNav(page: import("@playwright/test").Page, mobile: boolean, label: string) {
@@ -77,6 +79,17 @@ test("project images keep their project-site base path after client navigation",
   expect(imageFailures).toEqual([]);
 });
 
+test("project cards link to generated individual project pages", async ({ page }) => {
+  await page.goto(sitePath("projects"));
+  const firstProject = page.locator("main article h2 a").first();
+  await expect(firstProject).toBeVisible();
+  const href = await firstProject.getAttribute("href");
+  expect(href).toMatch(new RegExp(`^${BASE_PATH}/projects/[a-z0-9-]+/?$`));
+  await firstProject.click();
+  await expect(page.locator("main h1")).toBeVisible();
+  await expect(page.getByRole("link", { name: /all projects/i })).toBeVisible();
+});
+
 test("home defers project screenshots until their cards approach the viewport", async ({ page }) => {
   await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
   await page.goto(sitePath());
@@ -146,8 +159,7 @@ test("writeup body images and attachments keep their project-site base path afte
   await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
   await page.goto(sitePath());
   await clickPrimaryNav(page, info.project.name === "mobile", "Writeups");
-  const firstArticle = page.locator("main ol a[href*='/writeups/']").first();
-  await firstArticle.click();
+  await page.locator(`main ol a[href^="${BASE_PATH}/writeups/pwn-abbys"]`).click();
   await expect(page.locator("main h1")).toBeVisible();
 
   const articleImages = page.locator("article.writeup-prose img");

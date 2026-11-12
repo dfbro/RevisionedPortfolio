@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { normalizeBasePath } from "./site-config.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT = path.join(ROOT, "content");
@@ -65,10 +66,19 @@ if (site) {
   try {
     const url = new URL(site.url);
     if (!["https:", "http:"].includes(url.protocol)) fail("site.json url must use HTTP(S)");
+    if (url.pathname !== "/" || url.search || url.hash) fail("site.json url must contain only the canonical origin; use basePath for path prefixes");
   } catch {
     fail("site.json url is not a valid URL");
   }
-  if (site.schemaVersion !== 1) fail("Unsupported content schemaVersion: " + site.schemaVersion);
+  if (site.schemaVersion !== 2) fail("Unsupported content schemaVersion: " + site.schemaVersion);
+  try {
+  try {
+    if ((normalizeBasePath(site.basePath ?? "/") || "/") !== (site.basePath ?? "/")) fail("site.json basePath must be `/` or a normalized URL-safe path");
+  } catch { fail("site.json basePath must be `/` or a normalized URL-safe path"); }
+  } catch {
+    fail("site.json basePath is invalid");
+  }
+  if (site.outputDirectory !== "dist") fail("site.json outputDirectory must be `dist`");
 }
 
 const appearance = readJson("appearance.json");

@@ -1,13 +1,15 @@
-import { createReadStream, readFileSync } from "node:fs";
+import { createReadStream } from "node:fs";
 import { stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { readSiteConfig } from "./site-config.mjs";
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "out");
+const ROOT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const SITE = readSiteConfig(ROOT_DIR);
+const ROOT = path.join(ROOT_DIR, SITE.outputDirectory);
 const PORT = Number(process.argv[2] ?? process.env.PORT ?? 3100);
-const SITE = JSON.parse(readFileSync(path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "content", "site.json"), "utf8"));
-const BASE_PATH = new URL(SITE.url).pathname.replace(/\/+$/, "");
+const BASE_PATH = SITE.basePath;
 const TYPES = {
   ".avif": "image/avif",
   ".css": "text/css; charset=utf-8",
@@ -47,6 +49,15 @@ async function resolveFile(urlPath) {
 
   const candidate = path.resolve(ROOT, "." + decoded);
   if (candidate !== ROOT && !candidate.startsWith(ROOT + path.sep)) return null;
+
+  if (!path.extname(candidate)) {
+    try {
+      const html = candidate + ".html";
+      if ((await stat(html)).isFile()) return html;
+    } catch {
+      // Continue with directory-index lookup for trailing-slash exports.
+    }
+  }
 
   try {
     const info = await stat(candidate);

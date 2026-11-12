@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Reveal } from "@/components/motion/reveal";
 import { SplitHeading } from "@/components/motion/split-heading";
 import { Media } from "@/components/site/media";
@@ -40,7 +41,8 @@ export default async function ProjectsPage() {
               "@type": "CreativeWork",
               name: p.title,
               description: p.description,
-              url: p.projectUrl ?? undefined,
+              url: `${base}/projects/${encodeURIComponent(p.id)}`,
+              sameAs: p.projectUrl ?? undefined,
               image: abs(p.imageUrl)?.startsWith("data:") ? undefined : abs(p.imageUrl),
               genre: p.category,
               keywords: p.tags.join(", "),
@@ -65,11 +67,14 @@ export default async function ProjectsPage() {
           <article key={p.id} className={i % 2 ? "md:mt-32" : ""}>
             <Media src={p.imageUrl} alt={p.title} eager={i === 0} className="aspect-[4/3] w-full" />
             <div className="mt-5 flex items-baseline justify-between gap-6">
-              <h2 className="font-display text-3xl font-semibold tracking-tight">{p.title}</h2>
+              <h2 className="font-display text-3xl font-semibold tracking-tight"><Link href={`/projects/${encodeURIComponent(p.id)}`} className="hover:text-primary">{p.title}</Link></h2>
               <span className="meta shrink-0">{p.category}</span>
             </div>
             <p className="mt-3 text-muted-foreground">{p.description}</p>
             {p.tags.length > 0 && <p className="meta mt-4">{p.tags.join(" · ")}</p>}
+            <Link href={`/projects/${encodeURIComponent(p.id)}`} className="meta mt-5 inline-block border-b border-primary pb-1 text-foreground">
+              project details ↗
+            </Link>
             {p.projectUrl && (
               <a href={p.projectUrl} target="_blank" rel="noopener noreferrer" className="meta mt-5 inline-block border-b border-primary pb-1 text-foreground">
                 visit ↗

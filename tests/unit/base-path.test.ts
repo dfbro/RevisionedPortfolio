@@ -1,15 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { BASE_PATH, withBasePath } from "@/lib/base-path";
+import { BASE_PATH, normalizeBasePath, withBasePath } from "@/lib/base-path";
 
 describe("withBasePath", () => {
-  it("prefixes root-relative public assets for GitHub project-site hosting", () => {
-    expect(withBasePath("/assets/uploads/image.jpg")).toBe(`${BASE_PATH}/assets/uploads/image.jpg`);
-    expect(withBasePath("/profile.jpg")).toBe(`${BASE_PATH}/profile.jpg`);
+  it("uses the domain root by default", () => {
+    expect(BASE_PATH).toBe("");
+    expect(withBasePath("/assets/uploads/image.jpg")).toBe("/assets/uploads/image.jpg");
+    expect(withBasePath("/profile.jpg")).toBe("/profile.jpg");
   });
 
-  it("does not duplicate an existing project base path", () => {
-    expect(withBasePath(`${BASE_PATH}/assets/uploads/image.jpg`)).toBe(`${BASE_PATH}/assets/uploads/image.jpg`);
-    expect(withBasePath(BASE_PATH)).toBe(BASE_PATH);
+  it("supports an optional project-site base path without duplicating it", () => {
+    expect(normalizeBasePath("/RevisionedPortfolio/")).toBe("/RevisionedPortfolio");
+    expect(withBasePath("/assets/uploads/image.jpg", "/RevisionedPortfolio")).toBe("/RevisionedPortfolio/assets/uploads/image.jpg");
+    expect(withBasePath("/RevisionedPortfolio/assets/uploads/image.jpg", "/RevisionedPortfolio")).toBe("/RevisionedPortfolio/assets/uploads/image.jpg");
+    expect(withBasePath("/RevisionedPortfolio", "/RevisionedPortfolio")).toBe("/RevisionedPortfolio");
   });
 
   it("leaves external, inline, anchor and mail URLs unchanged", () => {
@@ -28,5 +31,10 @@ describe("withBasePath", () => {
 
   it("preserves a null source", () => {
     expect(withBasePath(null)).toBeNull();
+  });
+
+  it("rejects unsafe base paths", () => {
+    expect(() => normalizeBasePath("/../private")).toThrow();
+    expect(() => normalizeBasePath("/bad path")).toThrow();
   });
 });

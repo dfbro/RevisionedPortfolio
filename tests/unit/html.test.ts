@@ -28,12 +28,12 @@ describe("renderWriteupHtml", () => {
   it("adds rel+target to external links only", async () => {
     const { html } = await renderWriteupHtml('<a href="https://x.dev">x</a><a href="/writeups">y</a>');
     expect(html).toContain('href="https://x.dev" rel="noopener noreferrer" target="_blank"');
-    expect(html).toContain('<a href="/RevisionedPortfolio/writeups">y</a>');
+    expect(html).toContain('<a href="/writeups">y</a>');
   });
   it("prefixes local image and attachment URLs in the RSC-rendered HTML payload", async () => {
     const { html } = await renderWriteupHtml('<img src="/assets/uploads/figure.png"><a href="/assets/uploads/evidence.pdf">evidence</a>');
-    expect(html).toContain('src="/RevisionedPortfolio/assets/uploads/figure.png"');
-    expect(html).toContain('href="/RevisionedPortfolio/assets/uploads/evidence.pdf"');
+    expect(html).toContain('src="/assets/uploads/figure.png"');
+    expect(html).toContain('href="/assets/uploads/evidence.pdf"');
     expect(html).toContain('loading="lazy"');
     expect(html).toContain('fetchpriority="low"');
     expect(html).toContain('decoding="async"');

@@ -6,6 +6,7 @@ import path from "node:path";
 import { z } from "zod";
 import { achievementWeight } from "@/lib/achievements";
 import { normalizeCategory, sortSkillsPwnFirst } from "@/lib/data/mappers";
+import { normalizeBasePath } from "@/lib/site-config";
 import type { AchievementItem, Attachment, Profile, ProjectItem, WriteupDetail, WriteupSummary } from "@/lib/types";
 
 const CONTENT_ROOT = path.join(process.cwd(), "content");
@@ -82,8 +83,15 @@ const profileSchema = z.object({
 });
 
 const siteSchema = z.object({
-  schemaVersion: z.number().int().positive(),
-  url: z.string().url(),
+  schemaVersion: z.literal(2),
+  url: z.url().refine((value) => {
+    const parsed = new URL(value);
+    return ["https:", "http:"].includes(parsed.protocol) && parsed.pathname === "/" && !parsed.search && !parsed.hash;
+  }, "url must contain only the canonical HTTP(S) origin"),
+  basePath: z.string().default("/").refine((value) => {
+    try { return (normalizeBasePath(value) || "/") === value; } catch { return false; }
+  }, "basePath must be `/` or a normalized URL-safe path"),
+  outputDirectory: z.literal("dist").default("dist"),
   title: z.string().min(1),
   description: z.string().default(""),
   language: z.string().default("en"),

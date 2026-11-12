@@ -11,18 +11,18 @@ Next.js 16 static export (App Router) · React 19 · TypeScript · Tailwind CSS 
 ```bash
 pnpm install
 pnpm dev                         # Next.js development preview at http://localhost:3007
-pnpm build                       # generates static output in out/
-pnpm start                       # serves out/ at http://127.0.0.1:3100
+pnpm build                       # generates static output in dist/
+pnpm start                       # serves dist/ at http://127.0.0.1:3100
 ```
 
-The public site has no database, login, upload endpoint, contact API, or request-time Next.js server. `pnpm start` is a small static file server for local preview; production hosting receives only the contents of `out/`.
+The public site has no database, login, upload endpoint, contact API, or request-time Next.js server. `pnpm start` is a small static file server for local preview; production hosting receives only the contents of `dist/`.
 
 ## Scripts
 
 | Script | What it does |
 | --- | --- |
 | `pnpm dev` | Next.js development server on port 3007 |
-| `pnpm start` / `pnpm preview:static` | Serves the built `out/` directory on loopback port 3100 |
+| `pnpm start` / `pnpm preview:static` | Serves the built `dist/` directory on loopback port 3100 |
 | `pnpm test` | Unit tests (Vitest) |
 | `pnpm e2e` | Playwright tests against the exported files served without Next.js runtime |
 | `pnpm typecheck` / `pnpm lint` | Type and lint checks |
@@ -32,13 +32,20 @@ The public site has no database, login, upload endpoint, contact API, or request
 
 ## Deploy
 
-The `pages.yml` GitHub Actions workflow runs lint, typecheck, unit tests, content validation, static export, output verification, and deploys the `out/` artifact to GitHub Pages. The production site is served entirely from static files.
+The `pages.yml` GitHub Actions workflow runs lint, typecheck, unit tests, content validation, static export, output verification, and deploys the `dist/` artifact to GitHub Pages. The production site is served entirely from static files.
 
 ### Domain and route configuration
 
-`content/site.json` is the source for the canonical site origin, trailing-slash policy, title, description, and language. The build derives canonical metadata, Open Graph URLs, JSON-LD, sitemap, and robots output from this configuration. Changing the URL in this file does not change DNS or GitHub Pages settings; those must be configured separately.
+`content/site.json` is the deployment source of truth:
 
-GitHub Pages serves this project at `https://dfbro.github.io/RevisionedPortfolio/`; `next.config.ts` sets the matching project-site base path. No custom domain or DNS ownership is required.
+- `url`: canonical HTTP(S) origin only, e.g. `https://dfbro.my.id` (no repository path).
+- `basePath`: `/` for a custom domain or GitHub Pages user site; `/repository-name` for a project site.
+- `outputDirectory`: fixed to `dist`.
+- `trailingSlash`, `title`, `description`, and `language`: canonical route and metadata settings.
+
+Next.js `basePath`, public-asset prefixes, metadata, JSON-LD, robots, sitemap, static export scripts, preview server, and GitHub Actions artifact all consume this same configuration. The sitemap includes the six canonical section pages, every published writeup, and each individual project page. Changing `url` does not change DNS or GitHub Pages settings automatically.
+
+The active deployment is `https://dfbro.my.id/` with root base path `/`. `CNAME` is emitted into the static artifact for the custom hostname; GitHub Pages' actual custom-domain setting remains a repository setting and DNS must point to GitHub Pages independently.
 
 ### Editing content
 
