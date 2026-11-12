@@ -3,6 +3,16 @@ import { expect, test } from "@playwright/test";
 const BASE_PATH = "/RevisionedPortfolio";
 const sitePath = (path = "") => `${BASE_PATH}/${path}`;
 
+async function clickPrimaryNav(page: import("@playwright/test").Page, mobile: boolean, label: string) {
+  if (mobile) await page.getByRole("button", { name: "menu" }).click();
+  const menu = mobile ? page.locator("#mobile-menu") : page.locator("nav");
+  await menu.getByRole("link", { name: label, exact: true }).click();
+}
+
+async function deferredOrLoadedSource(image: import("@playwright/test").Locator) {
+  return (await image.getAttribute("src")) || (await image.getAttribute("data-deferred-src"));
+}
+
 test("home renders real content without horizontal overflow", async ({ page }) => {
   await page.goto(sitePath());
   await expect(page.getByRole("heading", { level: 1 })).toContainText("ELANG");
@@ -41,6 +51,150 @@ test("primary navigation transitions to projects and achievements", async ({ pag
   expect(failures).toEqual([]);
 });
 
+test("project images keep their project-site base path after client navigation", async ({ page }, info) => {
+  const imageFailures: string[] = [];
+  page.on("response", (response) => {
+    if (response.url().includes("/assets/uploads/") && response.status() >= 400) imageFailures.push(`${response.status()} ${response.url()}`);
+  });
+  await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
+  await page.goto(sitePath());
+  await clickPrimaryNav(page, info.project.name === "mobile", "Projects");
+
+  const images = page.locator("main article img");
+  await expect(images).toHaveCount(12);
+  const imageSources: string[] = [];
+  for (let index = 0; index < await images.count(); index += 1) {
+    const image = images.nth(index);
+    await expect.poll(() => deferredOrLoadedSource(image)).toMatch(new RegExp(`^${BASE_PATH}/assets/uploads/`));
+    const source = await deferredOrLoadedSource(image);
+    imageSources.push(source!);
+    await image.scrollIntoViewIfNeeded();
+    await expect(image).toHaveAttribute("src", source!);
+    await expect.poll(() => image.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  }
+  const assetStatuses = await Promise.all(imageSources.map(async (src) => (await page.request.get(new URL(src, page.url()).toString())).status()));
+  expect(assetStatuses).toEqual(Array(12).fill(200));
+  expect(imageFailures).toEqual([]);
+});
+
+test("home defers project screenshots until their cards approach the viewport", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
+  await page.goto(sitePath());
+  const images = page.locator(".stack-card img");
+  await expect(images).toHaveCount(6);
+  const initial = await images.evaluateAll((nodes) => nodes.map((node) => ({
+    src: node.getAttribute("src"),
+    deferred: node.getAttribute("data-deferred-src"),
+  })));
+  expect(initial.every((image) => image.src === null && image.deferred?.startsWith(`${BASE_PATH}/assets/uploads/`))).toBe(true);
+
+  const first = images.first();
+  await first.scrollIntoViewIfNeeded();
+  await expect.poll(() => first.getAttribute("src")).toMatch(new RegExp(`^${BASE_PATH}/assets/uploads/`));
+  await expect.poll(() => first.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  const stillDeferred = await images.evaluateAll((nodes) => nodes.filter((node) => node.hasAttribute("data-deferred-src")).length);
+  expect(stillDeferred).toBeGreaterThan(0);
+});
+
+test("home defers the about portrait until its section enters the viewport", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
+  await page.goto(sitePath());
+  const image = page.locator(".about-photo img");
+  await expect(image).toHaveCount(1);
+  await expect(image).not.toHaveAttribute("src", /.+/);
+  await expect(image).toHaveAttribute("data-deferred-src", `${BASE_PATH}/profile.jpg`);
+  await image.scrollIntoViewIfNeeded();
+  await expect(image).toHaveAttribute("src", `${BASE_PATH}/profile.jpg`);
+  await expect.poll(() => image.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+});
+
+test("achievement thumbnails keep their project-site base path after client navigation", async ({ page }, info) => {
+  const imageFailures: string[] = [];
+  page.on("response", (response) => {
+    if (response.url().includes("/assets/uploads/") && response.status() >= 400) imageFailures.push(`${response.status()} ${response.url()}`);
+  });
+  await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
+  await page.goto(sitePath());
+  await clickPrimaryNav(page, info.project.name === "mobile", "Record");
+
+  const images = page.locator(".achievement-gallery img");
+  await expect.poll(() => images.count()).toBeGreaterThan(0);
+  const count = await images.count();
+  expect(count).toBeGreaterThan(0);
+  const sources: string[] = [];
+  for (let index = 0; index < Math.min(count, 6); index += 1) {
+    const image = images.nth(index);
+    await expect.poll(() => deferredOrLoadedSource(image)).toMatch(new RegExp(`^${BASE_PATH}/assets/uploads/`));
+    const source = await deferredOrLoadedSource(image);
+    sources.push(source!);
+    await image.scrollIntoViewIfNeeded();
+    await expect(image).toHaveAttribute("src", source!);
+    await expect.poll(() => image.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  }
+  const statuses = await Promise.all(sources.map(async (src) => (await page.request.get(src)).status()));
+  expect(statuses).toEqual(Array(sources.length).fill(200));
+  expect(imageFailures).toEqual([]);
+});
+
+test("writeup body images and attachments keep their project-site base path after navigation", async ({ page }, info) => {
+  const failedAssets: string[] = [];
+  page.on("response", (response) => {
+    if ((response.url().includes("/assets/uploads/") || response.url().includes("/assets/exports/")) && response.status() >= 400) {
+      failedAssets.push(`${response.status()} ${response.url()}`);
+    }
+  });
+  await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
+  await page.goto(sitePath());
+  await clickPrimaryNav(page, info.project.name === "mobile", "Writeups");
+  const firstArticle = page.locator("main ol a[href*='/writeups/']").first();
+  await firstArticle.click();
+  await expect(page.locator("main h1")).toBeVisible();
+
+  const articleImages = page.locator("article.writeup-prose img");
+  const count = await articleImages.count();
+  expect(count).toBeGreaterThan(0);
+  for (let index = 0; index < Math.min(count, 4); index += 1) {
+    const image = articleImages.nth(index);
+    await expect(image).toHaveAttribute("src", new RegExp(`^${BASE_PATH}/assets/uploads/`));
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  }
+  await page.goto(sitePath("writeups"));
+  await page.locator(`main ol a[href^="${BASE_PATH}/writeups/pwn-abbys"]`).click();
+  await expect(page.locator("main h1")).toContainText(/Abbys/i);
+  const attachment = page.locator(`#attachments a[href^="${BASE_PATH}/assets/uploads/"]`).first();
+  await expect(attachment).toBeVisible();
+  const attachmentUrl = await attachment.getAttribute("href");
+  expect(attachmentUrl).toMatch(new RegExp(`^${BASE_PATH}/assets/uploads/`));
+  expect((await page.request.get(new URL(attachmentUrl!, page.url()).toString())).status()).toBe(200);
+  expect(failedAssets).toEqual([]);
+});
+
+test("related writeup cover images wait until the related section is visible", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
+  await page.goto(sitePath("writeups/pwn-abbys"));
+  const section = page.locator('section[aria-labelledby="related-heading"]');
+  const images = section.locator("img");
+  await expect(images).toHaveCount(3);
+  const sources: string[] = [];
+  for (let index = 0; index < await images.count(); index += 1) {
+    const image = images.nth(index);
+    await expect(image).not.toHaveAttribute("src", /.+/);
+    const source = await image.getAttribute("data-deferred-src");
+    expect(source).toMatch(new RegExp(`^(?:${BASE_PATH}/assets/uploads/|https?://)`));
+    sources.push(source!);
+  }
+  await section.scrollIntoViewIfNeeded();
+  for (let index = 0; index < await images.count(); index += 1) {
+    const image = images.nth(index);
+    await image.scrollIntoViewIfNeeded();
+    await expect(image).toHaveAttribute("src", sources[index]);
+    if (sources[index].startsWith(`${BASE_PATH}/`)) {
+      await expect.poll(() => image.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+    }
+  }
+});
+
 test("first visit to home opens behind the preloader, which then lifts", async ({ page }, info) => {
   test.skip(info.project.name === "reduced-motion", "no preloader when motion is reduced");
   await page.goto(sitePath());
@@ -50,6 +204,48 @@ test("first visit to home opens behind the preloader, which then lifts", async (
   expect(await page.evaluate(() => sessionStorage.getItem("intro-seen"))).toBe("1");
   await page.reload();
   await expect(page.getByRole("status", { name: "Loading" })).toBeHidden();
+});
+
+test("large hero headings schedule their SplitText work during browser idle after a refresh", async ({ page }, info) => {
+  test.skip(info.project.name === "reduced-motion", "SplitText is disabled when reduced motion is requested");
+  await page.addInitScript(() => {
+    sessionStorage.setItem("intro-seen", "1");
+    const idleWindow = window as Window & {
+      __idleSchedules?: number;
+      requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
+    };
+    idleWindow.__idleSchedules = 0;
+    const native = idleWindow.requestIdleCallback?.bind(window);
+    if (native) {
+      idleWindow.requestIdleCallback = (callback, options) => {
+        idleWindow.__idleSchedules = (idleWindow.__idleSchedules ?? 0) + 1;
+        return native(callback, options);
+      };
+    }
+  });
+  await page.goto(sitePath());
+  await page.evaluate(() => document.fonts.ready);
+  await expect.poll(() => page.evaluate(() => (window as Window & { __idleSchedules?: number }).__idleSchedules ?? 0)).toBe(2);
+  await expect(page.locator("main h1")).toContainText("ELANG");
+  await expect(page.locator("main h1")).toContainText("DIMAS SYADEWA");
+  const images = await page.locator("main img").evaluateAll((nodes) => nodes.map((node) => ({
+    loading: (node as HTMLImageElement).loading,
+    fetchPriority: (node as HTMLImageElement).fetchPriority,
+  })));
+  expect(images.every((image) => image.loading === "lazy" && image.fetchPriority === "low")).toBe(true);
+});
+
+test("activity heatmap reveals as one surface instead of animating hundreds of cells", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
+  await page.goto(sitePath());
+  const card = page.locator(".hm-card");
+  await card.scrollIntoViewIfNeeded();
+  await expect(card).toBeVisible();
+  const cells = page.locator(".hm-cell");
+  expect(await cells.count()).toBeGreaterThan(350);
+  await expect.poll(() => page.locator(".hm-grid-visual").evaluate((node) => getComputedStyle(node).opacity)).toBe("1");
+  const individuallyTransformed = await cells.evaluateAll((nodes) => nodes.filter((node) => getComputedStyle(node).transform !== "none").length);
+  expect(individuallyTransformed).toBe(0);
 });
 
 test("all sections become visible after scrolling (nothing stuck at opacity 0)", async ({ page }) => {
@@ -177,10 +373,18 @@ test("writeup export downloads static HTML and Markdown and can print", async ({
 });
 
 test("achievement title opens the certificate preview in place", async ({ page }) => {
+  const imageFailures: string[] = [];
+  page.on("response", (response) => {
+    if (response.url().includes("/assets/uploads/") && response.status() >= 400) imageFailures.push(`${response.status()} ${response.url()}`);
+  });
   await page.goto(sitePath("achievements"));
   await page.getByRole("button", { name: /^View certificate:/ }).first().click();
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
+  const certificate = dialog.locator("img");
+  await expect(certificate).toHaveAttribute("src", new RegExp(`^${BASE_PATH}/assets/uploads/`));
+  await expect.poll(() => certificate.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  expect(imageFailures).toEqual([]);
   await expect(page).toHaveURL(/\/achievements$/);
   await page.keyboard.press("Escape");
   await expect(dialog).toHaveCount(0);

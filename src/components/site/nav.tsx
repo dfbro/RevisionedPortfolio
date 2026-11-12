@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { ScrollCounter } from "@/components/motion/scroll-counter";
 import { ThemeToggle } from "@/components/site/theme-toggle";
@@ -16,6 +16,8 @@ const LINKS = [
 
 export function Nav({ brand }: { brand: string }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const prefetchOnIntent = (href: string) => () => router.prefetch(href);
   const [open, setOpen] = useState(false);
   return (
     <header className="fixed inset-x-0 top-0 z-50 text-white mix-blend-difference">
@@ -28,6 +30,10 @@ export function Nav({ brand }: { brand: string }) {
             <Link
               key={l.href}
               href={l.href}
+              prefetch={false}
+              onMouseEnter={prefetchOnIntent(l.href)}
+              onFocus={prefetchOnIntent(l.href)}
+              onTouchStart={prefetchOnIntent(l.href)}
               className={cn("text-sm transition-opacity hover:opacity-100", pathname.startsWith(l.href) ? "opacity-100" : "opacity-60")}
             >
               {l.label}
@@ -43,7 +49,16 @@ export function Nav({ brand }: { brand: string }) {
       {open && (
         <div id="mobile-menu" className="flex flex-col gap-4 px-4 pb-8 md:hidden">
           {LINKS.map((l) => (
-            <Link key={l.href} href={l.href} className="font-display text-4xl" onClick={() => setOpen(false)}>
+            <Link
+              key={l.href}
+              href={l.href}
+              prefetch={false}
+              onMouseEnter={prefetchOnIntent(l.href)}
+              onFocus={prefetchOnIntent(l.href)}
+              onTouchStart={prefetchOnIntent(l.href)}
+              className="font-display text-4xl"
+              onClick={() => setOpen(false)}
+            >
               {l.label}
             </Link>
           ))}

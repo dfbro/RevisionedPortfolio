@@ -5,9 +5,9 @@ import { useRef } from "react";
 import { onIntroDone } from "@/lib/intro";
 import { gsap, NO_REDUCED, SplitText } from "@/lib/motion";
 
-type Props = { text: string; as?: "h1" | "h2" | "p" | "span"; className?: string; delay?: number; onScroll?: boolean; waitIntro?: boolean };
+type Props = { text: string; as?: "h1" | "h2" | "p" | "span"; className?: string; delay?: number; onScroll?: boolean; waitIntro?: boolean; deferUntilIdle?: boolean };
 
-export function SplitHeading({ text, as: Tag = "h2", className, delay = 0, onScroll = false, waitIntro = false }: Props) {
+export function SplitHeading({ text, as: Tag = "h2", className, delay = 0, onScroll = false, waitIntro = false, deferUntilIdle = false }: Props) {
   const ref = useRef<HTMLHeadingElement>(null);
   useGSAP(
     () => {
@@ -15,6 +15,7 @@ export function SplitHeading({ text, as: Tag = "h2", className, delay = 0, onScr
       mm.add(NO_REDUCED, (_, mediaContextSafe) => {
         let disposed = false;
         let split: SplitText | undefined;
+        let cancelIdle: (() => void) | undefined;
         const createSplitNow = () => {
           if (disposed || !ref.current) return;
           split = SplitText.create(ref.current, {
@@ -33,13 +34,32 @@ export function SplitHeading({ text, as: Tag = "h2", className, delay = 0, onScr
           });
         };
         const createSplit = (mediaContextSafe?.(createSplitNow) as (() => void) | undefined) ?? createSplitNow;
+        const scheduleSplit = () => {
+          if (disposed) return;
+          if (!deferUntilIdle) {
+            createSplit();
+            return;
+          }
+          const idleApi = window as Window & {
+            requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
+            cancelIdleCallback?: (handle: number) => void;
+          };
+          if (typeof idleApi.requestIdleCallback === "function") {
+            const idleId = idleApi.requestIdleCallback(createSplit, { timeout: 1400 });
+            cancelIdle = () => idleApi.cancelIdleCallback?.(idleId);
+          } else {
+            const timer = window.setTimeout(createSplit, 180);
+            cancelIdle = () => window.clearTimeout(timer);
+          }
+        };
         const start = () => {
-          if (document.fonts.status === "loaded") createSplit();
-          else void document.fonts.ready.then(createSplit);
+          if (document.fonts.status === "loaded") scheduleSplit();
+          else void document.fonts.ready.then(scheduleSplit);
         };
         const off = waitIntro ? onIntroDone(start) : (start(), undefined);
         return () => {
           disposed = true;
+          cancelIdle?.();
           off?.();
           split?.revert();
         };

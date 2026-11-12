@@ -59,11 +59,11 @@ export default async function ProjectsPage() {
     <main className="mx-auto max-w-[1600px] px-4 pt-32 pb-24 md:px-8 md:pt-44">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }} />
       <SectionLabel index={3} name="projects" />
-      <SplitHeading as="h1" text="Projects" className="mt-4 mb-20 font-display text-[18vw] leading-[0.8] font-black tracking-[-0.05em] md:text-[12vw]" />
+      <SplitHeading as="h1" text="Projects" deferUntilIdle className="mt-4 mb-20 font-display text-[18vw] leading-[0.8] font-black tracking-[-0.05em] md:text-[12vw]" />
       <Reveal stagger className="grid gap-x-8 gap-y-20 md:grid-cols-2">
         {projects.map((p, i) => (
           <article key={p.id} className={i % 2 ? "md:mt-32" : ""}>
-            <Media src={p.imageUrl} alt={p.title} className="aspect-[4/3] w-full" />
+            <Media src={p.imageUrl} alt={p.title} eager={i === 0} className="aspect-[4/3] w-full" />
             <div className="mt-5 flex items-baseline justify-between gap-6">
               <h2 className="font-display text-3xl font-semibold tracking-tight">{p.title}</h2>
               <span className="meta shrink-0">{p.category}</span>

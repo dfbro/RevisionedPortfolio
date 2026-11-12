@@ -1,14 +1,12 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { SectionLabel } from "@/components/site/section-label";
 import { buildCalendar, type Calendar } from "@/lib/activity";
 import type { DayCounts } from "@/lib/data/activity";
 import { formatDate } from "@/lib/format";
-import { gsap, NO_REDUCED } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 type Source = { key: "ctf" | "github"; label: string; noun: string; days: DayCounts; href: string; handle: string; external?: boolean };
@@ -38,29 +36,19 @@ export function ActivityHeatmap({ sources, today }: { sources: Source[]; today: 
   // Built here from the sparse day list, so only the active days travel in the page payload.
   const cal: Calendar = useMemo(() => buildCalendar(new Map(src.days), new Date(today)), [src, today]);
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-      mm.add(NO_REDUCED, () => {
-        const trigger = { trigger: ".hm-card", start: "top 75%", once: true };
-        // Weeks light up left to right, then the count runs up to the total.
-        gsap.from(".hm-cell", { scale: 0, autoAlpha: 0, duration: 0.4, ease: "back.out(2)", stagger: { amount: 1.1, from: "start" }, scrollTrigger: trigger });
-        const n = { v: 0 };
-        const total = document.querySelector<HTMLElement>(".hm-total");
-        gsap.to(n, {
-          v: cal.total,
-          duration: 1.6,
-          ease: "expo.out",
-          scrollTrigger: trigger,
-          onUpdate: () => {
-            if (total) total.textContent = String(Math.round(n.v));
-          },
-        });
-      });
-      return () => mm.revert();
-    },
-    { scope: ref, dependencies: [key], revertOnUpdate: true },
-  );
+  useEffect(() => {
+    const card = ref.current?.querySelector(".hm-card");
+    if (!card) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        card.classList.add("is-visible");
+        observer.disconnect();
+      }
+    }, { threshold: 0.12 });
+    observer.observe(card);
+    return () => observer.disconnect();
+  }, []);
 
   const scroller = (el: HTMLDivElement | null) => {
     // On narrow screens the grid scrolls sideways; open on the recent weeks.
@@ -94,11 +82,11 @@ export function ActivityHeatmap({ sources, today }: { sources: Source[]; today: 
 
       <div className="hm-card relative overflow-hidden rounded-2xl border border-border bg-card p-6 md:p-10" role="tabpanel">
         {/* Soft glow behind the recent weeks, where the activity lands. */}
-        <div aria-hidden className="pointer-events-none absolute -right-24 -bottom-24 size-96 rounded-full bg-primary/15 blur-3xl" />
+        <div aria-hidden className="hm-glow pointer-events-none absolute -right-24 -bottom-24 size-96 rounded-full" />
         <div className="relative flex flex-wrap items-end justify-between gap-8">
           <div>
             <p className="font-display text-7xl leading-none font-black tracking-tight tabular-nums md:text-8xl">
-              <span className="hm-total">{cal.total}</span>
+              <span>{cal.total}</span>
             </p>
             <p className="meta mt-2">{src.noun} in the last year</p>
           </div>
@@ -109,7 +97,7 @@ export function ActivityHeatmap({ sources, today }: { sources: Source[]; today: 
           </div>
         </div>
 
-        <div ref={scroller} className="relative mt-10 overflow-x-auto pb-2" aria-hidden>
+        <div ref={scroller} className="hm-grid-visual relative mt-10 overflow-x-auto pb-2" aria-hidden>
           <div className="min-w-[680px]">
             <div className="mb-2 grid grid-cols-[repeat(53,minmax(0,1fr))] gap-[3px]">
               {cal.months.map((m) => (

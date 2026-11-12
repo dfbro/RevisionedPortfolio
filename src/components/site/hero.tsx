@@ -34,13 +34,14 @@ export function Hero({ name, alias, role, location, school }: Props) {
       <div className="flex flex-1 flex-col">
         {/* One h1 carrying the full name (search engines read it as the page's main subject). */}
         <h1 className="mb-10">
-          <SplitHeading as="span" text={first} waitIntro className="block font-display text-[22vw] leading-[0.8] font-black tracking-[-0.05em] md:text-[17vw]" />
+          <SplitHeading as="span" text={first} waitIntro deferUntilIdle className="block font-display text-[22vw] leading-[0.8] font-black tracking-[-0.05em] md:text-[17vw]" />
           {rest.length > 0 && (
             <SplitHeading
               as="span"
               text={rest.join(" ")}
               delay={0.15}
               waitIntro
+              deferUntilIdle
               className="block font-display text-[11vw] leading-[0.9] font-light tracking-[-0.04em] [font-stretch:125%] md:text-[8.5vw]"
             />
           )}
