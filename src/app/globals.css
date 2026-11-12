@@ -124,6 +124,18 @@ html.lenis body {
   opacity: 1;
   transform: translateY(0);
 }
+.hm-canvas {
+  visibility: hidden;
+}
+.hm-card.is-animating .hm-cell {
+  visibility: hidden;
+}
+.hm-card.is-animating .hm-canvas {
+  visibility: visible;
+}
+.hm-card.is-complete .hm-canvas {
+  visibility: hidden;
+}
 .tl-item {
   opacity: 0.3;
   transition: opacity 420ms ease;

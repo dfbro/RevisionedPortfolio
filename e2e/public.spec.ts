@@ -235,17 +235,46 @@ test("large hero headings schedule their SplitText work during browser idle afte
   expect(images.every((image) => image.loading === "lazy" && image.fetchPriority === "low")).toBe(true);
 });
 
-test("activity heatmap reveals as one surface instead of animating hundreds of cells", async ({ page }) => {
+test("activity heatmap restores the original spring-pop cascade without per-cell JavaScript", async ({ page }, info) => {
+  test.skip(info.project.name === "reduced-motion", "cell motion is disabled when reduced motion is requested");
   await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
   await page.goto(sitePath());
   const card = page.locator(".hm-card");
   await card.scrollIntoViewIfNeeded();
   await expect(card).toBeVisible();
+  await expect(card).toHaveClass(/is-visible/);
   const cells = page.locator(".hm-cell");
   expect(await cells.count()).toBeGreaterThan(350);
   await expect.poll(() => page.locator(".hm-grid-visual").evaluate((node) => getComputedStyle(node).opacity)).toBe("1");
-  const individuallyTransformed = await cells.evaluateAll((nodes) => nodes.filter((node) => getComputedStyle(node).transform !== "none").length);
-  expect(individuallyTransformed).toBe(0);
+  const canvas = card.locator(".hm-canvas");
+  await expect(canvas).toHaveAttribute("data-cell-count", String(await cells.count()));
+  await expect(canvas).toHaveAttribute("data-stagger-ms", "1100");
+  await expect(canvas).toHaveAttribute("data-duration-ms", "400");
+  await expect(canvas).toHaveAttribute("data-motion-state", "animating");
+  const paintedPixels = () => canvas.evaluate((node) => {
+    const element = node as HTMLCanvasElement;
+    const pixels = element.getContext("2d")!.getImageData(0, 0, element.width, element.height).data;
+    let count = 0;
+    for (let index = 3; index < pixels.length; index += 4) if (pixels[index] > 0) count += 1;
+    return count;
+  });
+  await expect.poll(paintedPixels).toBeGreaterThan(0);
+  await expect(canvas).toHaveAttribute("data-motion-state", "complete", { timeout: 4000 });
+  await expect(card).toHaveClass(/is-complete/);
+  await expect.poll(() => cells.first().evaluate((node) => getComputedStyle(node).visibility)).toBe("visible");
+  await expect.poll(() => canvas.evaluate((node) => getComputedStyle(node).visibility)).toBe("hidden");
+  await expect(card.locator(".hm-total")).not.toHaveText("0");
+});
+
+test("activity heatmap stays static when reduced motion is requested", async ({ page }, info) => {
+  test.skip(info.project.name !== "reduced-motion", "only applies to reduced-motion project");
+  await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
+  await page.goto(sitePath());
+  const card = page.locator(".hm-card");
+  await card.scrollIntoViewIfNeeded();
+  await expect(card).toHaveClass(/is-complete/);
+  await expect(card.locator(".hm-canvas")).toHaveAttribute("data-motion-state", "reduced");
+  await expect.poll(() => card.locator(".hm-cell").first().evaluate((node) => getComputedStyle(node).visibility)).toBe("visible");
 });
 
 test("all sections become visible after scrolling (nothing stuck at opacity 0)", async ({ page }) => {
