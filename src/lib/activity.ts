@@ -36,6 +36,15 @@ const GITHUB_RESERVED_PATHS = new Set([
   "readme", "search", "security", "settings", "site", "sponsors", "team", "topics",
 ]);
 
+/** Normalize a user-selected GitHub login before it is used in a build-time fetch URL. */
+export function normalizeGithubUsername(username: string | null | undefined): string | null {
+  const value = username?.trim();
+  if (!value || !/^(?=.{1,39}$)[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/.test(value) || GITHUB_RESERVED_PATHS.has(value.toLowerCase())) {
+    return null;
+  }
+  return value;
+}
+
 /** Resolve the account owner from either a GitHub profile URL or a repository URL. */
 export function githubUser(url: string | null): string | null {
   if (!url) return null;
@@ -51,16 +60,15 @@ export function githubUser(url: string | null): string | null {
     ) return null;
 
     const owner = parsed.pathname.split("/").filter(Boolean)[0];
-    if (
-      !owner ||
-      !/^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$/.test(owner) ||
-      GITHUB_RESERVED_PATHS.has(owner.toLowerCase())
-    ) return null;
-
-    return owner;
+    return normalizeGithubUsername(owner);
   } catch {
     return null;
   }
+}
+
+/** An explicit activity login overrides the social-link owner for the build-time contribution snapshot. */
+export function resolveGithubActivityUsername(username: string | null | undefined, profileUrl: string | null): string | null {
+  return normalizeGithubUsername(username) ?? githubUser(profileUrl);
 }
 
 export function countByDay(dates: (string | null)[]): Map<string, number> {
