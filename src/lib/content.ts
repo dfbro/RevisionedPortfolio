@@ -6,6 +6,7 @@ import path from "node:path";
 import { z } from "zod";
 import { achievementWeight } from "@/lib/achievements";
 import { normalizeCategory, sortSkillsPwnFirst } from "@/lib/data/mappers";
+import { isHeroNameLineGroupingValid, resolveHeroNameLines } from "@/lib/hero-name";
 import { normalizeBasePath } from "@/lib/site-config";
 import type { AchievementItem, Attachment, Profile, ProjectItem, WriteupDetail, WriteupSummary } from "@/lib/types";
 
@@ -64,6 +65,7 @@ const profileSchema = z.object({
   websiteUrl: z.string().url().nullable().optional(),
   githubUrl: z.string().url().nullable().optional(),
   githubActivityUsername: z.string().trim().max(39).regex(/^(?=.{1,39}$)[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/).nullable().optional(),
+  heroNameLines: z.array(z.string().trim().min(1).max(80)).min(1).max(6).nullable().optional(),
   instagramUrl: z.string().url().nullable().optional(),
   profileImageUrl: z.string().min(1),
   aboutText: z.string().default(""),
@@ -81,6 +83,10 @@ const profileSchema = z.object({
     sameAs: z.array(z.string().url()).default([]),
     locale: z.string().optional(),
   }).optional(),
+}).superRefine((profile, ctx) => {
+  if (profile.heroNameLines && !isHeroNameLineGroupingValid(profile.displayName, profile.heroNameLines)) {
+    ctx.addIssue({ code: "custom", path: ["heroNameLines"], message: "Hero name lines must contain the full display name in its original word order." });
+  }
 });
 
 const siteSchema = z.object({
@@ -302,6 +308,7 @@ export const getProfile = cache(async (): Promise<Profile> => {
     websiteUrl: profile.websiteUrl ?? null,
     githubUrl: profile.githubUrl ?? null,
     githubActivityUsername: profile.githubActivityUsername ?? null,
+    heroNameLines: resolveHeroNameLines(profile.displayName, profile.heroNameLines),
     instagramUrl: profile.instagramUrl ?? null,
     seo: profile.seo ?? { keywords: [], sameAs: [] },
   };

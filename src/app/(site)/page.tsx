@@ -37,7 +37,7 @@ export default async function Home() {
 
   return (
     <main>
-      <Hero name={profile.displayName} alias={profile.alias} role="pwn · rev · web exploit" location="Malang, ID" school={school} />
+      <Hero name={profile.displayName} nameLines={profile.heroNameLines} alias={profile.alias} role="pwn · rev · web exploit" location="Malang, ID" school={school} />
       {intro && <AboutShort text={intro} imageUrl={profile.profileImageUrl} />}
 
       <section className="mx-auto max-w-[1600px] px-4 py-24 md:px-8 md:py-36">

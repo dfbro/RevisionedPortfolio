@@ -5,9 +5,9 @@ import { useRef } from "react";
 import { onIntroDone } from "@/lib/intro";
 import { gsap, NO_REDUCED, SplitText } from "@/lib/motion";
 
-type Props = { text: string; as?: "h1" | "h2" | "p" | "span"; className?: string; delay?: number; onScroll?: boolean; waitIntro?: boolean; deferUntilIdle?: boolean };
+type Props = { text: string; as?: "h1" | "h2" | "p" | "span"; className?: string; delay?: number; onScroll?: boolean; waitIntro?: boolean; deferUntilIdle?: boolean; keepWordsTogether?: boolean };
 
-export function SplitHeading({ text, as: Tag = "h2", className, delay = 0, onScroll = false, waitIntro = false, deferUntilIdle = false }: Props) {
+export function SplitHeading({ text, as: Tag = "h2", className, delay = 0, onScroll = false, waitIntro = false, deferUntilIdle = false, keepWordsTogether = false }: Props) {
   const ref = useRef<HTMLHeadingElement>(null);
   useGSAP(
     () => {
@@ -21,6 +21,8 @@ export function SplitHeading({ text, as: Tag = "h2", className, delay = 0, onScr
           split = SplitText.create(ref.current, {
             // Only chars are animated; wrapping every word as well creates unused DOM nodes.
             type: "chars",
+            // Hero names can still wrap at spaces, but never between characters of one word.
+            smartWrap: keepWordsTogether,
             mask: "chars",
             onSplit: (self) =>
               gsap.from(self.chars, {
