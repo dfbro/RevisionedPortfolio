@@ -24,13 +24,13 @@ test("home renders real content without horizontal overflow", async ({ page }) =
   expect(overflow).toBeLessThanOrEqual(0);
 });
 
-test("GitHub activity is available after writeups in the home heatmap", async ({ page }) => {
+test("GitHub activity is available after projects in the home heatmap", async ({ page }) => {
   await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
   await page.goto(sitePath());
 
   const sectionOrder = await page.locator("main").evaluate((main) => {
     const sections = Array.from(main.querySelectorAll(":scope > section"));
-    return ["writeups", "activity", "projects", "record"].map((label) =>
+    return ["writeups", "projects", "activity", "record"].map((label) =>
       sections.findIndex((section) => section.querySelector(":scope > div .meta")?.textContent?.toLowerCase().includes(label)),
     );
   });
