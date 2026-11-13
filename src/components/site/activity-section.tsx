@@ -4,7 +4,7 @@ import { getGithubDays } from "@/lib/data/activity";
 
 type Props = { writeupDates: (string | null)[]; achievementDates: (string | null)[]; githubUrl: string | null };
 
-/** CTF activity from the site's own data, plus GitHub when its public calendar is reachable. Streamed, so GitHub never delays the page. */
+/** CTF activity comes from local content; GitHub contributions are snapshotted during static builds. */
 export async function ActivitySection({ writeupDates, achievementDates, githubUrl }: Props) {
   const github = await getGithubDays(githubUrl);
   const ctf = [...countByDay([...writeupDates, ...achievementDates])];

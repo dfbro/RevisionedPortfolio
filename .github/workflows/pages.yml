@@ -1,17 +1,21 @@
 name: Deploy static portfolio to GitHub Pages
 
 on:
+  pull_request:
+    branches: [main]
   push:
     branches: [main]
+  schedule:
+    # Refresh the build-time GitHub contribution snapshot daily, away from the hour boundary.
+    - cron: "23 9 * * *"
+      timezone: "Asia/Jakarta"
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -53,12 +57,26 @@ jobs:
       - name: Verify exported files
         run: pnpm verify:output
 
+      - name: Install Playwright Chromium
+        if: github.event_name == 'pull_request'
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: End-to-end tests
+        if: github.event_name == 'pull_request'
+        run: pnpm e2e
+
       - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
 
   deploy:
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
