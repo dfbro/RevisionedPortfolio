@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import { readFileSync } from "node:fs";
 
 const SITE = JSON.parse(readFileSync("content/site.json", "utf8")) as { basePath?: string };
+const PROFILE = JSON.parse(readFileSync("content/profile.json", "utf8")) as { displayName: string; heroNameLines?: string[] };
 const BASE_PATH = SITE.basePath === "/" || !SITE.basePath ? "" : `/${SITE.basePath.split("/").filter(Boolean).join("/")}`;
 const sitePath = (path = "") => `${BASE_PATH}/${path}`;
 
@@ -22,6 +23,28 @@ test("home renders real content without horizontal overflow", async ({ page }) =
   await expect(page.locator(`main ol a[href^='${BASE_PATH}/writeups/']`).first()).toBeAttached();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
+});
+
+test("hero name follows configured line groups and never splits a word", async ({ page }, info) => {
+  test.skip(info.project.name === "reduced-motion", "SplitText word wrappers are disabled when motion is reduced");
+  await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
+  await page.goto(sitePath());
+  await page.evaluate(() => document.fonts.ready);
+
+  const lines = page.locator("main h1 .hero-name-line");
+  const expectedLines = (PROFILE.heroNameLines?.length
+    ? PROFILE.heroNameLines
+    : [PROFILE.displayName.trim().split(/\s+/)[0], PROFILE.displayName.trim().split(/\s+/).slice(1).join(" ")].filter(Boolean)
+  ).map((line) => line.toUpperCase());
+  await expect(lines).toHaveCount(expectedLines.length);
+  expect(await lines.evaluateAll((nodes) => nodes.map((node) => node.textContent?.trim()))).toEqual(expectedLines);
+
+  await expect.poll(() => lines.first().evaluate((node) => node.querySelectorAll('[style*="white-space: nowrap"]').length)).toBeGreaterThan(0);
+  const renderedWords = await lines.evaluateAll((nodes) => nodes.map((line) =>
+    Array.from(line.querySelectorAll('[style*="white-space: nowrap"]')).map((word) => word.textContent?.trim()),
+  ));
+  expect(renderedWords).toEqual(expectedLines.map((line) => line.split(/\s+/)));
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
 });
 
 test("GitHub activity is available after projects in the home heatmap", async ({ page }) => {
