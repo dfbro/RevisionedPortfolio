@@ -53,11 +53,11 @@ export default async function Home() {
         </div>
       </section>
 
+      {projects.length > 0 && <ProjectStack projects={projects} />}
+
       <Suspense>
         <ActivitySection writeupDates={writeups.map((w) => w.date)} achievementDates={achievements.map((a) => a.date)} githubUrl={profile.githubUrl} />
       </Suspense>
-
-      {projects.length > 0 && <ProjectStack projects={projects} />}
 
       <section className="mx-auto max-w-[1600px] px-4 py-24 md:px-8 md:py-36">
         <div className="mb-16 flex items-end justify-between">
