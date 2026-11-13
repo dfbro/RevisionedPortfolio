@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildCalendar, countByDay, githubUser, parseGithubContributions } from "@/lib/activity";
+import { buildCalendar, countByDay, githubUser, normalizeGithubUsername, parseGithubContributions, resolveGithubActivityUsername } from "@/lib/activity";
 
 describe("parseGithubContributions", () => {
   it("reads day counts from the cells' tooltips", () => {
@@ -33,6 +33,33 @@ describe("githubUser", () => {
     expect(githubUser("https://github.com/orgs/Claritys11")).toBeNull();
     expect(githubUser("not a URL")).toBeNull();
     expect(githubUser(null)).toBeNull();
+  });
+});
+
+describe("normalizeGithubUsername", () => {
+  it("accepts valid GitHub login values and trims whitespace", () => {
+    expect(normalizeGithubUsername(" Claritys11 ")).toBe("Claritys11");
+    expect(normalizeGithubUsername("octo-cat")).toBe("octo-cat");
+  });
+
+  it("rejects invalid, reserved, and overlong login values", () => {
+    expect(normalizeGithubUsername("bad--login")).toBeNull();
+    expect(normalizeGithubUsername("-leading")).toBeNull();
+    expect(normalizeGithubUsername("trailing-")).toBeNull();
+    expect(normalizeGithubUsername("topics")).toBeNull();
+    expect(normalizeGithubUsername("x".repeat(40))).toBeNull();
+    expect(normalizeGithubUsername(null)).toBeNull();
+  });
+});
+
+describe("resolveGithubActivityUsername", () => {
+  it("uses the explicit heatmap login instead of the social GitHub URL owner", () => {
+    expect(resolveGithubActivityUsername("activity-account", "https://github.com/social-link-owner/project")).toBe("activity-account");
+  });
+
+  it("falls back to the GitHub URL owner when the explicit login is blank or invalid", () => {
+    expect(resolveGithubActivityUsername("", "https://github.com/social-link-owner/project")).toBe("social-link-owner");
+    expect(resolveGithubActivityUsername("bad--login", "https://github.com/social-link-owner/project")).toBe("social-link-owner");
   });
 });
 

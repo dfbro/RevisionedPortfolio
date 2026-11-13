@@ -63,6 +63,7 @@ const profileSchema = z.object({
   email: z.string().email().nullable().optional(),
   websiteUrl: z.string().url().nullable().optional(),
   githubUrl: z.string().url().nullable().optional(),
+  githubActivityUsername: z.string().trim().max(39).regex(/^(?=.{1,39}$)[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/).nullable().optional(),
   instagramUrl: z.string().url().nullable().optional(),
   profileImageUrl: z.string().min(1),
   aboutText: z.string().default(""),
@@ -300,6 +301,7 @@ export const getProfile = cache(async (): Promise<Profile> => {
     email: profile.email ?? null,
     websiteUrl: profile.websiteUrl ?? null,
     githubUrl: profile.githubUrl ?? null,
+    githubActivityUsername: profile.githubActivityUsername ?? null,
     instagramUrl: profile.instagramUrl ?? null,
     seo: profile.seo ?? { keywords: [], sameAs: [] },
   };

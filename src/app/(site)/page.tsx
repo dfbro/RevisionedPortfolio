@@ -56,7 +56,7 @@ export default async function Home() {
       {projects.length > 0 && <ProjectStack projects={projects} />}
 
       <Suspense>
-        <ActivitySection writeupDates={writeups.map((w) => w.date)} achievementDates={achievements.map((a) => a.date)} githubUrl={profile.githubUrl} />
+        <ActivitySection writeupDates={writeups.map((w) => w.date)} achievementDates={achievements.map((a) => a.date)} githubUrl={profile.githubUrl} githubActivityUsername={profile.githubActivityUsername} />
       </Suspense>
 
       <section className="mx-auto max-w-[1600px] px-4 py-24 md:px-8 md:py-36">
