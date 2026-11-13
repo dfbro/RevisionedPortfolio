@@ -34,7 +34,7 @@ export function ProjectStack({ projects }: { projects: ProjectItem[] }) {
   return (
     <section ref={ref} className="mx-auto max-w-[1600px] px-4 py-24 md:px-8 md:py-32">
       <div className="mb-12 flex items-end justify-between">
-        <SectionLabel index={3} name="projects" />
+        <SectionLabel index={4} name="projects" />
         <Link href="/projects" className="meta border-b border-primary pb-1 text-foreground">
           all {pad(projects.length)} →
         </Link>

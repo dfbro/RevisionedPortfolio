@@ -24,6 +24,29 @@ test("home renders real content without horizontal overflow", async ({ page }) =
   expect(overflow).toBeLessThanOrEqual(0);
 });
 
+test("GitHub activity is available after writeups in the home heatmap", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
+  await page.goto(sitePath());
+
+  const sectionOrder = await page.locator("main").evaluate((main) => {
+    const sections = Array.from(main.querySelectorAll(":scope > section"));
+    return ["writeups", "activity", "projects", "record"].map((label) =>
+      sections.findIndex((section) => section.querySelector(":scope > div .meta")?.textContent?.toLowerCase().includes(label)),
+    );
+  });
+  expect(sectionOrder.every((position) => position >= 0)).toBe(true);
+  expect(sectionOrder).toEqual([...sectionOrder].sort((a, b) => a - b));
+
+  const tabs = page.getByRole("tablist", { name: "Activity source" });
+  const githubTab = tabs.getByRole("tab", { name: "GitHub", exact: true });
+  await expect(tabs.getByRole("tab", { name: "CTF", exact: true })).toBeVisible();
+  await expect(githubTab).toBeVisible();
+  await githubTab.click();
+  await expect(githubTab).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator(".hm-card").getByRole("link", { name: /@Claritys11/ })).toHaveAttribute("href", "https://github.com/Claritys11");
+  await expect(page.locator(".hm-total")).not.toHaveText("0");
+});
+
 test("primary navigation transitions to projects and achievements", async ({ page }, info) => {
   const failures: string[] = [];
   page.on("pageerror", (error) => failures.push(error.message));

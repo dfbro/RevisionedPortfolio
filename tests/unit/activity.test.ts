@@ -18,10 +18,20 @@ describe("parseGithubContributions", () => {
 });
 
 describe("githubUser", () => {
-  it("takes the login from a profile URL", () => {
+  it("takes the login from a profile URL or repository URL", () => {
     expect(githubUser("https://github.com/Claritys11")).toBe("Claritys11");
     expect(githubUser("https://github.com/Claritys11/")).toBe("Claritys11");
+    expect(githubUser("https://github.com/Claritys11/DevSecOps-Dashboard")).toBe("Claritys11");
+    expect(githubUser("https://www.github.com/Claritys11/DevSecOps-Dashboard?tab=readme")).toBe("Claritys11");
+    expect(githubUser("http://github.com/Claritys11/repository/tree/main")).toBe("Claritys11");
+  });
+
+  it("rejects non-GitHub hosts, reserved routes, and malformed URLs", () => {
     expect(githubUser("https://example.com/x")).toBeNull();
+    expect(githubUser("https://github.com.evil.example/Claritys11")).toBeNull();
+    expect(githubUser("https://github.com/topics")).toBeNull();
+    expect(githubUser("https://github.com/orgs/Claritys11")).toBeNull();
+    expect(githubUser("not a URL")).toBeNull();
     expect(githubUser(null)).toBeNull();
   });
 });

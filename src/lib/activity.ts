@@ -30,9 +30,37 @@ export function parseGithubContributions(html: string): Map<string, number> {
   return out;
 }
 
+const GITHUB_RESERVED_PATHS = new Set([
+  "about", "collections", "customer-stories", "dashboard", "enterprise", "events", "explore", "features",
+  "join", "login", "logout", "marketplace", "new", "notifications", "orgs", "organizations", "pricing",
+  "readme", "search", "security", "settings", "site", "sponsors", "team", "topics",
+]);
+
+/** Resolve the account owner from either a GitHub profile URL or a repository URL. */
 export function githubUser(url: string | null): string | null {
-  const m = url && /^https?:\/\/(?:www\.)?github\.com\/([A-Za-z0-9-]+)\/?$/.exec(url.trim());
-  return m ? m[1] : null;
+  if (!url) return null;
+
+  try {
+    const parsed = new URL(url.trim());
+    if (
+      !["http:", "https:"].includes(parsed.protocol) ||
+      !["github.com", "www.github.com"].includes(parsed.hostname) ||
+      parsed.port ||
+      parsed.username ||
+      parsed.password
+    ) return null;
+
+    const owner = parsed.pathname.split("/").filter(Boolean)[0];
+    if (
+      !owner ||
+      !/^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$/.test(owner) ||
+      GITHUB_RESERVED_PATHS.has(owner.toLowerCase())
+    ) return null;
+
+    return owner;
+  } catch {
+    return null;
+  }
 }
 
 export function countByDay(dates: (string | null)[]): Map<string, number> {

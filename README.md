@@ -34,6 +34,8 @@ The public site has no database, login, upload endpoint, contact API, or request
 
 The `pages.yml` GitHub Actions workflow runs lint, typecheck, unit tests, content validation, static export, output verification, and deploys the `dist/` artifact to GitHub Pages. The production site is served entirely from static files.
 
+The GitHub contribution heatmap is fetched during the static build and refreshed by the same workflow every day at 09:23 (`Asia/Jakarta`). `workflow_dispatch` remains available for a manual refresh. This keeps the public site static: no request-time API, database, worker, or GitHub token is required.
+
 ### Domain and route configuration
 
 `content/site.json` is the deployment source of truth:
