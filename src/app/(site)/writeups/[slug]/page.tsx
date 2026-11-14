@@ -98,7 +98,7 @@ export default async function WriteupPage({ params }: Params) {
           {w.difficulty && ` · ${w.difficulty}`}
           {w.competition && ` · ${w.competition}`} · {formatDate(w.date)}
         </p>
-        <SplitHeading as="h1" text={w.title} deferUntilIdle className="mt-4 max-w-6xl font-display text-5xl leading-[0.9] font-black tracking-[-0.04em] md:text-8xl" />
+        <SplitHeading as="h1" text={w.title} deferUntilIdle keepWordsTogether className="mt-4 max-w-6xl font-display text-5xl leading-[0.9] font-black tracking-[-0.04em] md:text-8xl" />
         {w.summary && <p className="mt-8 max-w-2xl text-lg text-muted-foreground">{w.summary}</p>}
         {w.tags.length > 0 && (
           <ul className="mt-6 flex flex-wrap gap-2">

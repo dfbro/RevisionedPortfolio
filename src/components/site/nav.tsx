@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { ScrollCounter } from "@/components/motion/scroll-counter";
 import { getLenis } from "@/components/motion/smooth-scroll";
 import { ThemeToggle } from "@/components/site/theme-toggle";
@@ -23,10 +23,22 @@ export function Nav({ brand }: { brand: string }) {
   const router = useRouter();
   const prefetchOnIntent = (href: string) => () => router.prefetch(href);
   const [menuState, setMenuState] = useState<MenuState>("closed");
+  const headerRef = useRef<HTMLElement>(null);
   const closeTimer = useRef<number | null>(null);
   const pendingHref = useRef<string | null>(null);
   const isOpen = menuState === "open";
   const isActive = menuState !== "closed";
+
+  const syncHeaderViewport = useCallback(() => {
+    const scrollbarGutter = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
+    headerRef.current?.style.setProperty("right", `${scrollbarGutter}px`);
+  }, []);
+
+  useLayoutEffect(() => {
+    syncHeaderViewport();
+    window.addEventListener("resize", syncHeaderViewport);
+    return () => window.removeEventListener("resize", syncHeaderViewport);
+  }, [syncHeaderViewport]);
 
   const finishClose = useCallback(() => {
     if (closeTimer.current !== null) window.clearTimeout(closeTimer.current);
@@ -74,15 +86,17 @@ export function Nav({ brand }: { brand: string }) {
     };
 
     document.documentElement.style.overflow = "hidden";
+    syncHeaderViewport();
     smoothScroll?.stop();
     window.addEventListener("keydown", closeOnEscape);
 
     return () => {
       window.removeEventListener("keydown", closeOnEscape);
       document.documentElement.style.overflow = previousOverflow;
+      syncHeaderViewport();
       smoothScroll?.start();
     };
-  }, [isActive, closeMenu]);
+  }, [isActive, closeMenu, syncHeaderViewport]);
 
   useEffect(() => () => {
     if (closeTimer.current !== null) window.clearTimeout(closeTimer.current);
@@ -90,6 +104,7 @@ export function Nav({ brand }: { brand: string }) {
 
   return (
     <header
+      ref={headerRef}
       data-nav-state={menuState}
       onTransitionEnd={(event) => {
         if (event.target === event.currentTarget && event.propertyName === "height" && menuState === "closing") finishClose();
@@ -129,7 +144,7 @@ export function Nav({ brand }: { brand: string }) {
         </div>
         <button
           type="button"
-          className={cn("meta md:hidden", isOpen ? "text-foreground" : "text-white")}
+          className={cn("meta ml-3 shrink-0 whitespace-nowrap px-1 py-2 md:hidden", isOpen ? "text-foreground" : "text-white")}
           aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={isOpen}
           aria-controls="mobile-menu"
