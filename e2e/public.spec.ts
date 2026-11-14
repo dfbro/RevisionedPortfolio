@@ -51,6 +51,12 @@ test("home follows the original Writeups → Projects → Record → Activity �
   await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
   await page.goto(sitePath());
 
+  // ActivitySection streams through Suspense; wait for its siblings before asserting the final DOM order.
+  const activitySection = page.locator("main > section:has(.hm-card)");
+  const closingQuote = page.locator("main > blockquote");
+  await expect(activitySection).toHaveCount(1, { timeout: 10000 });
+  await expect(closingQuote).toHaveCount(1, { timeout: 10000 });
+
   const sectionOrder = await page.locator("main").evaluate((main) => {
     const sections = Array.from(main.querySelectorAll(":scope > section"));
     const order = ["writeups", "projects", "record", "activity"].map((label) =>
