@@ -47,6 +47,34 @@ test("hero name follows configured line groups and never splits a word", async (
   expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
 });
 
+test("writeup titles wrap only between words and the mobile menu trigger stays in view", async ({ page }, info) => {
+  test.skip(info.project.name === "reduced-motion", "SplitText word wrappers are disabled when motion is reduced");
+  const mobile = info.project.name === "mobile";
+  await page.setViewportSize({ width: mobile ? 370 : 1440, height: 897 });
+  await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
+  await page.goto(sitePath("writeups/web-fushigi-crawler"));
+  await page.evaluate(() => document.fonts.ready);
+
+  const title = page.locator("main h1");
+  const words = title.locator('[style*="white-space: nowrap"]');
+  await expect.poll(() => words.count()).toBe(2);
+  const wordRects = await words.evaluateAll((nodes) => nodes.map((node) => ({
+    text: node.textContent?.trim(),
+    top: Math.round(node.getBoundingClientRect().top),
+  })));
+  expect(wordRects.map((word) => word.text)).toEqual(["Fushigi", "Crawler"]);
+  expect(wordRects[0].top === wordRects[1].top).toBe(!mobile);
+
+  if (mobile) {
+    const trigger = page.getByRole("button", { name: "Open navigation menu" });
+    const bounds = await trigger.boundingBox();
+    expect(bounds).not.toBeNull();
+    expect(bounds!.x).toBeGreaterThanOrEqual(0);
+    expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(358);
+    expect(await trigger.evaluate((node) => node.scrollWidth <= node.clientWidth)).toBe(true);
+  }
+});
+
 test("home follows the original Writeups → Projects → Record → Activity → Quote order", async ({ page }) => {
   await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
   await page.goto(sitePath());
