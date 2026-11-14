@@ -112,25 +112,63 @@ test("mobile navigation is an opaque full-screen overlay and closes with Escape"
   const trigger = page.getByRole("button", { name: "Open navigation menu" });
   await trigger.click();
   const menu = page.getByRole("navigation", { name: "Mobile navigation" });
+  const header = page.locator("header").first();
   await expect(menu).toBeVisible();
   await expect(page.getByRole("button", { name: "Close navigation menu" })).toHaveAttribute("aria-expanded", "true");
+  await expect.poll(() => header.evaluate((node) => node.getBoundingClientRect().height)).toBeGreaterThanOrEqual(await page.evaluate(() => innerHeight) - 1);
 
-  const overlay = await page.locator("header").first().evaluate((header) => ({
+  const overlay = await header.evaluate((header) => ({
     height: header.getBoundingClientRect().height,
     viewportHeight: window.innerHeight,
     background: getComputedStyle(header).backgroundColor,
     blend: getComputedStyle(header).mixBlendMode,
     scrollLock: document.documentElement.style.overflow,
+    transitionDuration: getComputedStyle(header).transitionDuration,
+    menuTransitionDuration: getComputedStyle(document.querySelector("#mobile-menu")!).transitionDuration,
   }));
   expect(overlay.height).toBeGreaterThanOrEqual(overlay.viewportHeight - 1);
   expect(overlay.background).not.toBe("rgba(0, 0, 0, 0)");
   expect(overlay.blend).toBe("normal");
   expect(overlay.scrollLock).toBe("hidden");
+  expect(Number.parseFloat(overlay.transitionDuration)).toBeGreaterThan(0);
+  expect(Number.parseFloat(overlay.menuTransitionDuration)).toBeGreaterThan(0);
 
   await page.keyboard.press("Escape");
   await expect(page.getByRole("button", { name: "Open navigation menu" })).toHaveAttribute("aria-expanded", "false");
-  await expect(menu).toBeHidden();
+  await expect(page.locator("#mobile-menu")).toHaveAttribute("aria-hidden", "true");
+  await expect(header).toHaveAttribute("data-nav-state", "closed");
   expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe("");
+});
+
+test("mobile menu finishes its close animation before navigating to another page", async ({ page }, info) => {
+  test.skip(info.project.name !== "mobile", "mobile menu only exists below the desktop breakpoint");
+  await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
+  await page.goto(sitePath());
+
+  await page.getByRole("button", { name: "Open navigation menu" }).click();
+  const header = page.locator("header").first();
+  const menu = page.getByRole("navigation", { name: "Mobile navigation" });
+  await expect(menu).toBeVisible();
+  const currentUrl = page.url();
+
+  await menu.getByRole("link", { name: "Projects", exact: true }).click();
+  await expect(header).toHaveAttribute("data-nav-state", "closing");
+  expect(page.url()).toBe(currentUrl);
+  await expect(page).toHaveURL(new RegExp(`${BASE_PATH}/projects/$`));
+  await expect(header).toHaveAttribute("data-nav-state", "closed");
+});
+
+test("mobile menu navigation respects reduced-motion preferences", async ({ page }, info) => {
+  test.skip(info.project.name !== "mobile", "mobile menu only exists below the desktop breakpoint");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
+  await page.goto(sitePath());
+
+  await page.getByRole("button", { name: "Open navigation menu" }).click();
+  const header = page.locator("header").first();
+  await page.getByRole("navigation", { name: "Mobile navigation" }).getByRole("link", { name: "Projects", exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`${BASE_PATH}/projects/$`));
+  await expect(header).toHaveAttribute("data-nav-state", "closed");
 });
 
 test("project images keep their project-site base path after client navigation", async ({ page }, info) => {
