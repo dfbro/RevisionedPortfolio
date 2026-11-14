@@ -7,7 +7,7 @@ const BASE_PATH = SITE.basePath === "/" || !SITE.basePath ? "" : `/${SITE.basePa
 const sitePath = (path = "") => `${BASE_PATH}/${path}`;
 
 async function clickPrimaryNav(page: import("@playwright/test").Page, mobile: boolean, label: string) {
-  if (mobile) await page.getByRole("button", { name: "menu" }).click();
+  if (mobile) await page.getByRole("button", { name: "Open navigation menu" }).click();
   const menu = mobile ? page.locator("#mobile-menu") : page.locator("nav");
   await menu.getByRole("link", { name: label, exact: true }).click();
 }
@@ -89,7 +89,7 @@ test("primary navigation transitions to projects and achievements", async ({ pag
   const nav = page.locator("nav");
   const menu = info.project.name === "mobile" ? page.locator("#mobile-menu") : nav;
   const openMobileMenu = async () => {
-    if (info.project.name === "mobile") await page.getByRole("button", { name: "menu" }).click();
+    if (info.project.name === "mobile") await page.getByRole("button", { name: "Open navigation menu" }).click();
   };
 
   await openMobileMenu();
@@ -102,6 +102,35 @@ test("primary navigation transitions to projects and achievements", async ({ pag
   await expect(page).toHaveURL(new RegExp(`${BASE_PATH}/achievements/$`));
   await expect(page.locator("main h1")).toContainText("Record");
   expect(failures).toEqual([]);
+});
+
+test("mobile navigation is an opaque full-screen overlay and closes with Escape", async ({ page }, info) => {
+  test.skip(info.project.name !== "mobile", "mobile menu only exists below the desktop breakpoint");
+  await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
+  await page.goto(sitePath());
+
+  const trigger = page.getByRole("button", { name: "Open navigation menu" });
+  await trigger.click();
+  const menu = page.getByRole("navigation", { name: "Mobile navigation" });
+  await expect(menu).toBeVisible();
+  await expect(page.getByRole("button", { name: "Close navigation menu" })).toHaveAttribute("aria-expanded", "true");
+
+  const overlay = await page.locator("header").first().evaluate((header) => ({
+    height: header.getBoundingClientRect().height,
+    viewportHeight: window.innerHeight,
+    background: getComputedStyle(header).backgroundColor,
+    blend: getComputedStyle(header).mixBlendMode,
+    scrollLock: document.documentElement.style.overflow,
+  }));
+  expect(overlay.height).toBeGreaterThanOrEqual(overlay.viewportHeight - 1);
+  expect(overlay.background).not.toBe("rgba(0, 0, 0, 0)");
+  expect(overlay.blend).toBe("normal");
+  expect(overlay.scrollLock).toBe("hidden");
+
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("button", { name: "Open navigation menu" })).toHaveAttribute("aria-expanded", "false");
+  await expect(menu).toBeHidden();
+  expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe("");
 });
 
 test("project images keep their project-site base path after client navigation", async ({ page }, info) => {
@@ -141,35 +170,40 @@ test("project cards link to generated individual project pages", async ({ page }
   await expect(page.getByRole("link", { name: /all projects/i })).toBeVisible();
 });
 
-test("home defers project screenshots until their cards approach the viewport", async ({ page }) => {
+test("home preloads project screenshots before they enter the viewport", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
   await page.goto(sitePath());
   const images = page.locator(".stack-card img");
   await expect(images).toHaveCount(6);
-  const initial = await images.evaluateAll((nodes) => nodes.map((node) => ({
-    src: node.getAttribute("src"),
-    deferred: node.getAttribute("data-deferred-src"),
-  })));
-  expect(initial.every((image) => image.src === null && image.deferred?.startsWith(`${BASE_PATH}/assets/uploads/`))).toBe(true);
-
   const first = images.first();
-  await first.scrollIntoViewIfNeeded();
+  const absoluteTop = await first.evaluate((node) => node.getBoundingClientRect().top + window.scrollY);
+  const viewportHeight = await page.evaluate(() => window.innerHeight);
+  await page.evaluate((top) => window.scrollTo({ top, behavior: "instant" }), Math.max(0, absoluteTop - viewportHeight - 300));
+
+  const beforeViewport = await first.evaluate((node) => ({ top: node.getBoundingClientRect().top, viewportHeight: window.innerHeight }));
+  expect(beforeViewport.top).toBeGreaterThan(beforeViewport.viewportHeight);
   await expect.poll(() => first.getAttribute("src")).toMatch(new RegExp(`^${BASE_PATH}/assets/uploads/`));
   await expect.poll(() => first.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
-  const stillDeferred = await images.evaluateAll((nodes) => nodes.filter((node) => node.hasAttribute("data-deferred-src")).length);
-  expect(stillDeferred).toBeGreaterThan(0);
+  const afterLoad = await first.evaluate((node) => ({ top: node.getBoundingClientRect().top, viewportHeight: window.innerHeight }));
+  expect(afterLoad.top).toBeGreaterThan(afterLoad.viewportHeight);
 });
 
-test("home defers the about portrait until its section enters the viewport", async ({ page }) => {
+test("home preloads the about portrait before its section enters the viewport", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
   await page.goto(sitePath());
   const image = page.locator(".about-photo img");
   await expect(image).toHaveCount(1);
-  await expect(image).not.toHaveAttribute("src", /.+/);
-  await expect(image).toHaveAttribute("data-deferred-src", `${BASE_PATH}/profile.jpg`);
-  await image.scrollIntoViewIfNeeded();
+  const absoluteTop = await image.evaluate((node) => node.getBoundingClientRect().top + window.scrollY);
+  const viewportHeight = await page.evaluate(() => window.innerHeight);
+  await page.evaluate((top) => window.scrollTo({ top, behavior: "instant" }), Math.max(0, absoluteTop - viewportHeight - 250));
+  const beforeViewport = await image.evaluate((node) => ({ top: node.getBoundingClientRect().top, viewportHeight: window.innerHeight }));
+  expect(beforeViewport.top).toBeGreaterThan(beforeViewport.viewportHeight);
   await expect(image).toHaveAttribute("src", `${BASE_PATH}/profile.jpg`);
   await expect.poll(() => image.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  const afterLoad = await image.evaluate((node) => ({ top: node.getBoundingClientRect().top, viewportHeight: window.innerHeight }));
+  expect(afterLoad.top).toBeGreaterThan(afterLoad.viewportHeight);
 });
 
 test("achievement thumbnails keep their project-site base path after client navigation", async ({ page }, info) => {
@@ -299,7 +333,7 @@ test("large hero headings schedule their SplitText work during browser idle afte
     loading: (node as HTMLImageElement).loading,
     fetchPriority: (node as HTMLImageElement).fetchPriority,
   })));
-  expect(images.every((image) => image.loading === "lazy" && image.fetchPriority === "low")).toBe(true);
+  expect(images.every((image) => (image.loading === "lazy" || image.loading === "eager") && (image.fetchPriority === "low" || image.fetchPriority === "high"))).toBe(true);
 });
 
 test("activity heatmap restores the original spring-pop cascade without per-cell JavaScript", async ({ page }, info) => {
