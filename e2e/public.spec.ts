@@ -75,6 +75,51 @@ test("writeup titles wrap only between words and the mobile menu trigger stays i
   }
 });
 
+test("split headings preserve descenders and project actions have horizontal spacing", async ({ page }, info) => {
+  test.skip(info.project.name === "reduced-motion", "SplitText masks are disabled when motion is reduced");
+  const mobile = info.project.name === "mobile";
+  await page.setViewportSize({ width: mobile ? 370 : 1440, height: 900 });
+  await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
+
+  for (const sample of [
+    { route: "about", glyph: "y" },
+    { route: "projects", glyph: "j" },
+    { route: "writeups", glyph: "p" },
+    { route: "writeups/web-fushigi-crawler", glyph: "g" },
+  ]) {
+    await page.goto(sitePath(sample.route));
+    const heading = page.locator("main h1.split-heading");
+    await expect(heading).toBeVisible();
+    const mask = heading.locator(".split-heading-char-mask").filter({ hasText: new RegExp(`^${sample.glyph}$`, "i") });
+    await expect.poll(() => mask.count()).toBe(1);
+    const dimensions = await mask.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return {
+        paddingBottom: Number.parseFloat(style.paddingBottom),
+        marginBottom: Number.parseFloat(style.marginBottom),
+        overflow: style.overflow,
+        height: element.getBoundingClientRect().height,
+        fontSize: Number.parseFloat(getComputedStyle(element.parentElement!).fontSize),
+      };
+    });
+    expect(dimensions.overflow).toBe("clip");
+    expect(dimensions.paddingBottom).toBeGreaterThan(0);
+    expect(dimensions.marginBottom).toBeLessThan(0);
+    expect(dimensions.height).toBeGreaterThanOrEqual(dimensions.fontSize - 1);
+  }
+
+  await page.goto(sitePath("projects"));
+  const actions = page.locator("[data-project-actions]").filter({ has: page.locator('a[target="_blank"]') }).first();
+  await expect(actions).toBeVisible();
+  const gap = await actions.evaluate((element) => Number.parseFloat(getComputedStyle(element).columnGap));
+  expect(gap).toBeGreaterThanOrEqual(16);
+  const details = await actions.getByRole("link", { name: /project details/i }).boundingBox();
+  const visit = await actions.locator('a[target="_blank"]').boundingBox();
+  expect(details).not.toBeNull();
+  expect(visit).not.toBeNull();
+  expect(visit!.x - (details!.x + details!.width)).toBeGreaterThanOrEqual(16);
+});
+
 test("home follows the original Writeups → Projects → Record → Activity → Quote order", async ({ page }) => {
   await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
   await page.goto(sitePath());

@@ -21,6 +21,7 @@ export function SplitHeading({ text, as: Tag = "h2", className, delay = 0, onScr
           split = SplitText.create(ref.current, {
             // Only chars are animated; wrapping every word as well creates unused DOM nodes.
             type: "chars",
+            charsClass: "split-heading-char",
             // Hero names can still wrap at spaces, but never between characters of one word.
             smartWrap: keepWordsTogether,
             mask: "chars",
@@ -71,7 +72,7 @@ export function SplitHeading({ text, as: Tag = "h2", className, delay = 0, onScr
     { scope: ref },
   );
   return (
-    <Tag ref={ref} className={className}>
+    <Tag ref={ref} className={`split-heading ${className ?? ""}`}>
       {text}
     </Tag>
   );
