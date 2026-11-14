@@ -2,7 +2,8 @@
   "displayName": "Elang Dimas Syadewa",
   "heroNameLines": [
     "Elang",
-    "Dimas Syadewa"
+    "Dimas",
+    "Syadewa"
   ],
   "alias": "Claritys",
   "brand": "Claritys",
@@ -74,35 +75,35 @@
   ],
   "education": [
     {
-      "school": "education",
       "level": "SMPN 11 Malang",
+      "school": "education",
       "period": ""
     },
     {
-      "school": "SMPN 11 Malang",
       "level": "Junior High School",
-      "period": ""
-    },
-    {
       "school": "SMPN 11 Malang",
+      "period": ""
+    },
+    {
       "level": "Junior High School",
+      "school": "SMPN 11 Malang",
       "period": ""
     },
     {
-      "school": "SMK Telkom Malang",
       "level": "Vocational High School",
+      "school": "SMK Telkom Malang",
       "period": ""
     },
     {
-      "school": "SMK Telkom Malang",
       "level": "Vocational High School",
+      "school": "SMK Telkom Malang",
       "period": ""
     }
   ],
   "seo": {
     "jobTitle": "Cybersecurity Student",
+    "locale": "id_ID",
     "description": "Elang Dimas Syadewa (Claritys) — Cybersecurity Specialist from Malang, Indonesia. I'm an IT student passionate about cybersecurity, with a focus on binary…",
-    "siteName": "Elang Dimas Syadewa Portfolio",
     "keywords": [
       "CTF",
       "Pwn",
@@ -116,6 +117,6 @@
       "https://github.com/Claritys11",
       "https://www.instagram.com/elanggslibaw"
     ],
-    "locale": "id_ID"
+    "siteName": "Elang Dimas Syadewa Portfolio"
   }
 }
