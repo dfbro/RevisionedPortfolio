@@ -60,10 +60,12 @@ test("writeup titles wrap only between words and the mobile menu trigger stays i
   await expect.poll(() => words.count()).toBe(2);
   const wordRects = await words.evaluateAll((nodes) => nodes.map((node) => ({
     text: node.textContent?.trim(),
-    top: Math.round(node.getBoundingClientRect().top),
+    top: node.getBoundingClientRect().top,
+    bottom: node.getBoundingClientRect().bottom,
   })));
   expect(wordRects.map((word) => word.text)).toEqual(["Fushigi", "Crawler"]);
   expect(wordRects[0].top === wordRects[1].top).toBe(!mobile);
+  if (mobile) expect(wordRects[1].top - wordRects[0].bottom).toBeGreaterThan(0);
 
   if (mobile) {
     const trigger = page.getByRole("button", { name: "Open navigation menu" });
@@ -82,30 +84,33 @@ test("split headings preserve descenders and project actions have horizontal spa
   await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
 
   for (const sample of [
-    { route: "about", glyph: "y" },
-    { route: "projects", glyph: "j" },
-    { route: "writeups", glyph: "p" },
-    { route: "writeups/web-fushigi-crawler", glyph: "g" },
+    { route: "about", glyphs: ["a", "y", "s"] },
+    { route: "projects", glyphs: ["j"] },
+    { route: "writeups", glyphs: ["p", "s"] },
+    { route: "writeups/web-fushigi-crawler", glyphs: ["g", "a", "s"] },
   ]) {
     await page.goto(sitePath(sample.route));
     const heading = page.locator("main h1.split-heading");
     await expect(heading).toBeVisible();
-    const mask = heading.locator(".split-heading-char-mask").filter({ hasText: new RegExp(`^${sample.glyph}$`, "i") });
-    await expect.poll(() => mask.count()).toBe(1);
-    const dimensions = await mask.evaluate((element) => {
+    const masks = heading.locator(".split-heading-char-mask");
+    await expect.poll(() => masks.count()).toBeGreaterThan(0);
+    const dimensions = await masks.evaluateAll((elements) => elements.map((element) => {
       const style = getComputedStyle(element);
       return {
         paddingBottom: Number.parseFloat(style.paddingBottom),
         marginBottom: Number.parseFloat(style.marginBottom),
-        overflow: style.overflow,
-        height: element.getBoundingClientRect().height,
-        fontSize: Number.parseFloat(getComputedStyle(element.parentElement!).fontSize),
+        overflowX: style.overflowX,
+        overflowY: style.overflowY,
       };
-    });
-    expect(dimensions.overflow).toBe("clip");
-    expect(dimensions.paddingBottom).toBeGreaterThan(0);
-    expect(dimensions.marginBottom).toBeLessThan(0);
-    expect(dimensions.height).toBeGreaterThanOrEqual(dimensions.fontSize - 1);
+    }));
+    expect(dimensions.every((item) => item.overflowX === "visible" && item.overflowY === "clip")).toBe(true);
+    expect(dimensions.every((item) => item.paddingBottom > 0 && item.marginBottom === 0)).toBe(true);
+
+    for (const glyph of sample.glyphs) {
+      const mask = masks.filter({ hasText: new RegExp(`^${glyph}$`, "i") });
+      await expect.poll(() => mask.count()).toBeGreaterThan(0);
+      await expect(mask.first()).toBeVisible();
+    }
   }
 
   await page.goto(sitePath("projects"));

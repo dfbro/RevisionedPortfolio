@@ -25,15 +25,23 @@ export function SplitHeading({ text, as: Tag = "h2", className, delay = 0, onScr
             // Hero names can still wrap at spaces, but never between characters of one word.
             smartWrap: keepWordsTogether,
             mask: "chars",
-            onSplit: (self) =>
-              gsap.from(self.chars, {
+            onSplit: (self) => {
+              // SplitText applies overflow: clip on both axes; keep the vertical reveal mask
+              // while allowing glyph side bearings to extend past each character's advance box.
+              self.masks.forEach((mask) => {
+                const maskElement = mask as HTMLElement;
+                maskElement.style.overflowX = "visible";
+                maskElement.style.overflowY = "clip";
+              });
+              return gsap.from(self.chars, {
                 yPercent: 110,
                 duration: 0.86,
                 ease: "power3.out",
                 stagger: 0.014,
                 delay,
                 scrollTrigger: onScroll ? { trigger: ref.current, start: "top 85%", once: true } : undefined,
-              }),
+              });
+            },
           });
         };
         const createSplit = (mediaContextSafe?.(createSplitNow) as (() => void) | undefined) ?? createSplitNow;
