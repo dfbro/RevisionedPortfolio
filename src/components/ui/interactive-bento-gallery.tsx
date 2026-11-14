@@ -284,13 +284,14 @@ const InteractiveBentoGallery: React.FC<InteractiveBentoGalleryProps> = ({ media
               visible: { y: 0, scale: 1, opacity: 1, transition: { type: "spring", stiffness: 350, damping: 25, delay: Math.min(index, 12) * 0.04 } },
             }}
             whileHover={{ scale: 1.02 }}
-            drag
+            // Keep vertical touch gestures available to the page; reordering is horizontal only.
+            drag="x"
             dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
             dragElastic={1}
             onDragStart={() => setIsDragging(true)}
             onDragEnd={(_, info) => {
               setIsDragging(false);
-              const moveDistance = info.offset.x + info.offset.y;
+              const moveDistance = info.offset.x;
               if (Math.abs(moveDistance) > 50) {
                 const newItems = [...items];
                 const draggedItem = newItems[index];
