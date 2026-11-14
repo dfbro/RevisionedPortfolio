@@ -47,18 +47,23 @@ test("hero name follows configured line groups and never splits a word", async (
   expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
 });
 
-test("GitHub activity is available after projects in the home heatmap", async ({ page }) => {
+test("home follows the original Writeups → Projects → Record → Activity → Quote order", async ({ page }) => {
   await page.addInitScript(() => sessionStorage.setItem("intro-seen", "1"));
   await page.goto(sitePath());
 
   const sectionOrder = await page.locator("main").evaluate((main) => {
     const sections = Array.from(main.querySelectorAll(":scope > section"));
-    return ["writeups", "projects", "activity", "record"].map((label) =>
+    const order = ["writeups", "projects", "record", "activity"].map((label) =>
       sections.findIndex((section) => section.querySelector(":scope > div .meta")?.textContent?.toLowerCase().includes(label)),
     );
+    const children = Array.from(main.children);
+    const activity = sections.find((section) => section.querySelector(".hm-card"));
+    const quote = main.querySelector(":scope > blockquote");
+    return { order, activityBeforeQuote: Boolean(activity && quote && children.indexOf(activity) < children.indexOf(quote)) };
   });
-  expect(sectionOrder.every((position) => position >= 0)).toBe(true);
-  expect(sectionOrder).toEqual([...sectionOrder].sort((a, b) => a - b));
+  expect(sectionOrder.order.every((position) => position >= 0)).toBe(true);
+  expect(sectionOrder.order).toEqual([...sectionOrder.order].sort((a, b) => a - b));
+  expect(sectionOrder.activityBeforeQuote).toBe(true);
 
   const tabs = page.getByRole("tablist", { name: "Activity source" });
   const githubTab = tabs.getByRole("tab", { name: "GitHub", exact: true });
@@ -283,9 +288,13 @@ test("large hero headings schedule their SplitText work during browser idle afte
   });
   await page.goto(sitePath());
   await page.evaluate(() => document.fonts.ready);
-  await expect.poll(() => page.evaluate(() => (window as Window & { __idleSchedules?: number }).__idleSchedules ?? 0)).toBe(2);
-  await expect(page.locator("main h1")).toContainText("ELANG");
-  await expect(page.locator("main h1")).toContainText("DIMAS SYADEWA");
+  // Each configured name line must be deferred; other headings may schedule their own idle work too.
+  await expect.poll(() => page.evaluate(() => (window as Window & { __idleSchedules?: number }).__idleSchedules ?? 0)).toBeGreaterThanOrEqual(2);
+  const nameLines = page.locator("main h1 .hero-name-line");
+  await expect(nameLines).toHaveCount(PROFILE.heroNameLines?.length ?? 2);
+  expect(await nameLines.evaluateAll((nodes) => nodes.map((node) => node.textContent?.trim()))).toEqual(
+    (PROFILE.heroNameLines?.length ? PROFILE.heroNameLines : [PROFILE.displayName.trim().split(/\s+/)[0], PROFILE.displayName.trim().split(/\s+/).slice(1).join(" ")]).map((line) => line.toUpperCase()),
+  );
   const images = await page.locator("main img").evaluateAll((nodes) => nodes.map((node) => ({
     loading: (node as HTMLImageElement).loading,
     fetchPriority: (node as HTMLImageElement).fetchPriority,

@@ -55,13 +55,9 @@ export default async function Home() {
 
       {projects.length > 0 && <ProjectStack projects={projects} />}
 
-      <Suspense>
-        <ActivitySection writeupDates={writeups.map((w) => w.date)} achievementDates={achievements.map((a) => a.date)} githubUrl={profile.githubUrl} githubActivityUsername={profile.githubActivityUsername} />
-      </Suspense>
-
       <section className="mx-auto max-w-[1600px] px-4 py-24 md:px-8 md:py-36">
         <div className="mb-16 flex items-end justify-between">
-          <SectionLabel index={5} name="record" />
+          <SectionLabel index={4} name="record" />
           <Link href="/achievements" className="meta border-b border-primary pb-1 text-foreground">
             full record →
           </Link>
@@ -69,6 +65,10 @@ export default async function Home() {
         {/* Only the ten that are shown cross to the client, not the whole record. */}
         <RecordTimeline items={mostNotable(achievements, 10)} />
       </section>
+
+      <Suspense>
+        <ActivitySection writeupDates={writeups.map((w) => w.date)} achievementDates={achievements.map((a) => a.date)} githubUrl={profile.githubUrl} githubActivityUsername={profile.githubActivityUsername} />
+      </Suspense>
 
       <Quote text={profile.philosophyText} />
     </main>

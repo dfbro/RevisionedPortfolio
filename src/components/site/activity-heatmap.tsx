@@ -209,7 +209,7 @@ export function ActivityHeatmap({ sources, today }: { sources: Source[]; today: 
     <section ref={ref} className="mx-auto max-w-[1600px] px-4 py-24 md:px-8 md:py-32">
       <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
         <div>
-          <SectionLabel index={4} name="activity" />
+          <SectionLabel index={5} name="activity" />
           <h2 className="mt-4 font-display text-4xl font-bold tracking-tight md:text-6xl">One solve at a time.</h2>
         </div>
         {sources.length > 1 && (
