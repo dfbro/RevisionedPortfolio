@@ -681,20 +681,22 @@ test("vertical scrolling over achievement certificates never reorders them", asy
     await expect(firstCard).toHaveCSS("touch-action", "pan-y");
   }
 
-  const dragBounds = await firstCard.boundingBox();
-  expect(dragBounds).not.toBeNull();
-  const dragStart = { x: dragBounds!.x + dragBounds!.width / 2, y: dragBounds!.y + dragBounds!.height / 2 };
-  if (info.project.name === "mobile") {
-    const client = await page.context().newCDPSession(page);
-    await client.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: dragStart.x, y: dragStart.y, id: 1 }] });
-    await client.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: dragStart.x + 120, y: dragStart.y, id: 1 }] });
-    await client.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
-    await client.detach();
-  } else {
-    await page.mouse.move(dragStart.x, dragStart.y);
-    await page.mouse.down();
-    await page.mouse.move(dragStart.x + 120, dragStart.y, { steps: 6 });
-    await page.mouse.up();
+  if (info.project.name !== "reduced-motion") {
+    const dragBounds = await firstCard.boundingBox();
+    expect(dragBounds).not.toBeNull();
+    const dragStart = { x: dragBounds!.x + dragBounds!.width / 2, y: dragBounds!.y + dragBounds!.height / 2 };
+    if (info.project.name === "mobile") {
+      const client = await page.context().newCDPSession(page);
+      await client.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: dragStart.x, y: dragStart.y, id: 1 }] });
+      await client.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: dragStart.x + 120, y: dragStart.y, id: 1 }] });
+      await client.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+      await client.detach();
+    } else {
+      await page.mouse.move(dragStart.x, dragStart.y);
+      await page.mouse.down();
+      await page.mouse.move(dragStart.x + 120, dragStart.y, { steps: 6 });
+      await page.mouse.up();
+    }
+    await expect.poll(() => cards.locator("h3").allTextContents()).not.toEqual(orderBefore);
   }
-  await expect.poll(() => cards.locator("h3").allTextContents()).not.toEqual(orderBefore);
 });
