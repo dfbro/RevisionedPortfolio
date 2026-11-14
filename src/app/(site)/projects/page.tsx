@@ -72,14 +72,16 @@ export default async function ProjectsPage() {
             </div>
             <p className="mt-3 text-muted-foreground">{p.description}</p>
             {p.tags.length > 0 && <p className="meta mt-4">{p.tags.join(" · ")}</p>}
-            <Link href={`/projects/${encodeURIComponent(p.id)}`} className="meta mt-5 inline-block border-b border-primary pb-1 text-foreground">
-              project details ↗
-            </Link>
-            {p.projectUrl && (
-              <a href={p.projectUrl} target="_blank" rel="noopener noreferrer" className="meta mt-5 inline-block border-b border-primary pb-1 text-foreground">
-                visit ↗
-              </a>
-            )}
+            <div data-project-actions className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <Link href={`/projects/${encodeURIComponent(p.id)}`} className="meta inline-flex whitespace-nowrap border-b border-primary pb-1 text-foreground">
+                project details ↗
+              </Link>
+              {p.projectUrl && (
+                <a href={p.projectUrl} target="_blank" rel="noopener noreferrer" className="meta inline-flex whitespace-nowrap border-b border-primary pb-1 text-foreground">
+                  visit ↗
+                </a>
+              )}
+            </div>
           </article>
         ))}
       </Reveal>
