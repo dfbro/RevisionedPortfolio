@@ -13,7 +13,7 @@ type Props = {
   onClick?: () => void;
 };
 
-/** Starts low-priority image requests only when their rendered box is close to the viewport. */
+/** Starts low-priority image requests before their rendered box reaches the viewport. */
 export function DeferredImage({ src, alt, className, eager = false, fetchPriority = "low", draggable, onClick }: Props) {
   const ref = useRef<HTMLImageElement>(null);
   const [nearViewport, setNearViewport] = useState(false);
@@ -22,6 +22,7 @@ export function DeferredImage({ src, alt, className, eager = false, fetchPriorit
     if (eager) return;
     const image = ref.current;
     if (!image) return;
+    const preloadMargin = Math.max(900, Math.round(window.innerHeight * 1.5));
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries.some((entry) => entry.isIntersecting)) {
@@ -29,9 +30,8 @@ export function DeferredImage({ src, alt, className, eager = false, fetchPriorit
           observer.disconnect();
         }
       },
-      // Wait until the image actually enters the viewport; large native-lazy margins can
-      // download whole below-the-fold sections while the hero is still animating.
-      { rootMargin: "0px" },
+      // Start the request roughly 1.5 screens early so it can finish before the visitor scrolls to it.
+      { rootMargin: `${preloadMargin}px 0px` },
     );
     observer.observe(image);
     return () => observer.disconnect();
@@ -45,7 +45,7 @@ export function DeferredImage({ src, alt, className, eager = false, fetchPriorit
       data-deferred-src={load ? undefined : src}
       alt={alt}
       className={className}
-      loading={eager ? "eager" : "lazy"}
+      loading={eager || nearViewport ? "eager" : "lazy"}
       fetchPriority={eager ? "high" : fetchPriority}
       decoding="async"
       draggable={draggable}
